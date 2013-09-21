@@ -1,6 +1,6 @@
-goog.provide('pizzaStruct');
+goog.provide('utilities.NewStruct');
 
-pizzaStruct.NewStruct = function(size) {
+utilities.NewStruct = function(size) {
   this.struct = [];
   for (var i = 7; i >= 0; i--) {
     var rows = [];
@@ -13,7 +13,6 @@ pizzaStruct.NewStruct = function(size) {
     }
     this.struct.push(rows);
   }
-  this.struct = wedges;
   this.size = size;
   this.wedgesAvailable = [];
   for (var i = 7; i >= 0; i--) {
@@ -21,15 +20,15 @@ pizzaStruct.NewStruct = function(size) {
   }
 };
 
-pizzaStruct.NewStruct.prototype.add = function(wedge, row, column, data) {
+utilities.NewStruct.prototype.add = function(wedge, row, column, data) {
   this.struct[wedge][row][column] = data;
 };
 
-pizzaStruct.NewStruct.prototype.get = function(wedge, row, column) {
+utilities.NewStruct.prototype.get = function(wedge, row, column) {
   return this.struct[wedge][row][column];
 };
 
-pizzaStruct.NewStruct.prototype.neighbors = function(wedge, row, column) {
+utilities.NewStruct.prototype.neighbors = function(wedge, row, column) {
   neighborList = [];
 
   var wedgeCCW;
@@ -92,5 +91,5 @@ pizzaStruct.NewStruct.prototype.neighbors = function(wedge, row, column) {
   return neighborList;
 };
 
-goog.exportSymbol('pizzaStruct.NewStruct', pizzaStruct.NewStruct);
+goog.exportSymbol('utilities.NewStruct', utilities.NewStruct);
 
