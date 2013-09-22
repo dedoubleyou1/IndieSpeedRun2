@@ -55,8 +55,8 @@ utilities.Level = function(size, triangleHeight) {
                   }
                 }
             }
-            
             attackNeighbors(i,j,k);
+            
           }
       })
     };
@@ -88,14 +88,14 @@ function randomizeLevel(size, triangleHeight, levelData, toppings) {
         if(rand < .4){
           var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
           
-          levelData.get(i,j,k).sprite.setFill(utilities.Topping('mushroom').image);;
+          levelData.get(i,j,k).sprite.setFill(utilities.Topping('mushroom').image);
           levelData.get(i,j,k).isOccupied = true;
           levelData.get(i,j,k).type = 'mushroom';
         }
         else if(rand >= .4 && rand < .6){
           var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
           
-          levelData.get(i,j,k).sprite.setFill('#');
+          levelData.get(i,j,k).sprite.setFill(utilities.Topping('olive').image);
           levelData.get(i,j,k).isOccupied = true;
           levelData.get(i,j,k).type = 'olive';
         }
