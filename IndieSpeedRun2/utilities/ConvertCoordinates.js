@@ -9,7 +9,7 @@ utilities.ConvertCoordinates = function(wedge,row,column)
     var startAngle = wedge * (Math.PI/4);
     
     //use ROW to figure out the "radius" of that row
-    var triangleHeight = 6;
+    var triangleHeight = 5;
     var rowRadius = triangleHeight/2 + row*(triangleHeight/2);
     
     //get the two SIDE vectors of this particular wedge @ rowRadius
