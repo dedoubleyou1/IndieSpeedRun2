@@ -72,7 +72,7 @@ IndieSpeedRun2.start = function() {
   // set current scene active
   director.replaceScene(scene);
 
-  var myNewLevel = new utilities.Level(5, 6);
+  var myNewLevel = new utilities.Level(4, 7.5);
   director.replaceScene(myNewLevel.levelScene);
 }
 
