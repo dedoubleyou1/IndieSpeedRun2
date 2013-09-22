@@ -81,19 +81,26 @@ function randomizeLevel(size, triangleHeight, levelData, toppings) {
     for (var row = size - 1; row >= 0; row--) {
       for (var column = row * 2; column >= 0; column--) {
         rand = Math.random();
-        if(rand < .4){
+        if(rand < .2){
           var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
           console.log(utilities);
           levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('mushroom').image);
           levelData.get(wedge, row, column).isOccupied = true;
           levelData.get(wedge, row, column).toppingType = 'mushroom';
         }
-        else if(rand >= .4 && rand < .6){
+        else if(rand >= .2 && rand < .3){
           var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
           
           levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('olive').image);
           levelData.get(wedge, row, column).isOccupied = true;
           levelData.get(wedge, row, column).toppingType = 'olive';
+        }
+        else if(rand >= .5 && rand < .55){
+          var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
+          
+          levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('anchovy').image);
+          levelData.get(wedge, row, column).isOccupied = true;
+          levelData.get(wedge, row, column).toppingType = 'anchovy';        
         }
       }
     }

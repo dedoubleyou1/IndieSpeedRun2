@@ -1,6 +1,7 @@
 goog.provide('utilities.Topping');
 
 var toppingData = {
+  //PEPPERONI//
   pepperoni: {
     image: 'assets/toppings_pepperoni.png',
     chaining: function(levelData, wedge, row, column){
@@ -9,28 +10,29 @@ var toppingData = {
     
   },
   
+  //MUSHROOM//
   mushroom: {
     image: 'assets/toppings_mushroom.png',
     chaining: function(levelData, wedge, row, column){
+        //turn into a pepperoni and ATTACK!!    
         levelData.get(wedge, row, column).toppingType = 'pepperoni';
         levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);      
         attackNeighbors(levelData, wedge, row, column);
     }
   },
   
+  //OLIVES//
   olive: {
     image: 'assets/toppings_olive.png',
     chaining: function(levelData, wedge, row, column){
       var neighborTypes = checkNeighbors(levelData,wedge,row,column);
       var pprCount = 0;
       
-      console.log(neighborTypes);
-      
       for (var i = neighborTypes.length - 1; i >= 0; i--) {
         if(neighborTypes[i] == 'pepperoni')
           pprCount++;
       }
-      
+
       if(pprCount >= 2){
         //turn into a pepperoni and ATTACK!!
         levelData.get(wedge, row, column).toppingType = 'pepperoni';
@@ -40,9 +42,24 @@ var toppingData = {
     }
   },
   
+  //ANCHOVY//
   anchovy: {
     image: 'assets/toppings_anchovy.png',
     chaining: function(levelData, wedge, row, column){
+      var neighborTypes = checkNeighbors(levelData,wedge,row,column);
+      var pprCount = 0;
+      
+      for (var i = neighborTypes.length - 1; i >= 0; i--) {
+        if(neighborTypes[i] == 'pepperoni')
+          pprCount++;
+      }
+      
+      if(pprCount == 3){
+        //turn into a pepperoni and ATTACK!!
+        levelData.get(wedge, row, column).toppingType = 'pepperoni';
+        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);      
+        attackNeighbors(levelData, wedge, row, column);
+      }
     }
   }
   
