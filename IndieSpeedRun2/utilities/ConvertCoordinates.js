@@ -9,7 +9,7 @@ utilities.ConvertCoordinates = function(wedge,row,column)
     var startAngle = wedge * (Math.PI/4);
     
     //use ROW to figure out the "radius" of that row
-    var triangleHeight = 50;
+    var triangleHeight = 6;
     var rowRadius = triangleHeight/2 + row*(triangleHeight/2);
     
     //get the two SIDE vectors of this particular wedge @ rowRadius
@@ -19,19 +19,27 @@ utilities.ConvertCoordinates = function(wedge,row,column)
     //get the center line of this 
     var centerEdge = goog.math.Vec2.difference(sideVector2,sideVector1);
     
-    //use ROW to figure out how to break up this vector (# of columns + 1)
-    var numberOfSegments = (row+1)*2;
+    //use ROW to figure out how to break up this vector into mini segments
+    var numberOfSegments = (row*2+1)*2;
+    var ratioOfSegment = 1/numberOfSegments;
     
     //use COLUMN to figure out how to scale the vector
-    centerEdge.scale((column+1) * 1/numberOfSegments);
-    //centerEdge.scale(1/numberofSegments/2 + column*(1/numberOfSegments));
+//    centerEdge.scale((column+1) * 1/numberOfSegments);
+    centerEdge.scale(ratioOfSegment + column*2*ratioOfSegment);
+
+    
+    var triangleCenter = goog.math.Vec2.sum(sideVector1,centerEdge);
+    
+    var offset = triangleHeight/16;
     
     //find OFFSET vector based on odd or even?
-//    if(column%2 == 0){
-        
-  //  }
+    if(column%2 == 0){
+        triangleCenter.add(triangleCenter.clone().normalize().scale(offset));
+    }else{
+        triangleCenter.add(triangleCenter.clone().normalize().scale(-offset));
+    }
     
-    return goog.math.Vec2.sum(sideVector1,centerEdge);
+    return triangleCenter;
 };
 
 goog.exportSymbol('utilities.ConvertCoordinates',utilities.ConvertCoordinates);
