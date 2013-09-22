@@ -12,7 +12,11 @@ goog.require('utilities.ConvertCoordinates');
 utilities.Level = function(size, triangleHeight) {
 
   var newLevel = new lime.Scene();
-  var toppings = new lime.Layer().setPosition(512,384);
+  var levelBackground = new lime.Sprite()
+    .setFill('assets/pizza_large.png')
+    .setPosition(512, 384);
+  newLevel.appendChild(levelBackground);
+  var toppings = new lime.Layer().setPosition(512, 384);
   var levelData = new utilities.NewStruct(size);
   for (var i = 7; i >= 0; i--) {
     for (var j = size - 1; j >= 0; j--) {
