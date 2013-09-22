@@ -9,7 +9,7 @@ utilities.ConvertCoordinates = function(wedge,row,column)
     var startAngle = wedge * (Math.PI/4);
     
     //use ROW to figure out the "radius" of that row
-    var triangleHeight = 100;
+    var triangleHeight = 50;
     var rowRadius = triangleHeight/2 + row*(triangleHeight/2);
     
     //get the two SIDE vectors of this particular wedge @ rowRadius
@@ -24,8 +24,12 @@ utilities.ConvertCoordinates = function(wedge,row,column)
     
     //use COLUMN to figure out how to scale the vector
     centerEdge.scale((column+1) * 1/numberOfSegments);
+    //centerEdge.scale(1/numberofSegments/2 + column*(1/numberOfSegments));
     
     //find OFFSET vector based on odd or even?
+//    if(column%2 == 0){
+        
+  //  }
     
     return goog.math.Vec2.sum(sideVector1,centerEdge);
 };
