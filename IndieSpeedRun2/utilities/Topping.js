@@ -5,13 +5,13 @@ var powerUpData = {
     isOn: false,
     number: 2
   },
-  timerSlow: {
-    isOn: false,
-    timeDamper: .5 //half times speed!
-  },
   areaOfEffect: {
     isOn: false,
     fillSize: 1
+  },
+  timerSlow: {
+    isOn: false,
+    timeDamper: .5 //half times speed!
   },
   bomb: {
     isOn: false,
@@ -43,9 +43,11 @@ var toppingData = {
     },
     powerUp: function(levelData, wedge, row, column, strength){
       if(strength >= 4){
-        
+        powerUpData.stacking.isOn = true;
         return true;
       }
+      
+      powerUpData.stacking.isOn = false;
       return false;
     }
   },
@@ -73,9 +75,11 @@ var toppingData = {
     
     powerUp: function(levelData, wedge, row, column, strength){
       if(strength >= 2){
-        
+        powerUpData.areaOfEffect.isOn = true;
         return true;
       }
+      
+      powerUpData.areaOfEffect.isOn = true;
       return false;
     }
   },
@@ -102,9 +106,11 @@ var toppingData = {
     },
     powerUp: function(levelData, wedge, row, column, strength){
       if(strength >= 1){
-        
+        powerUpData.timerSlow.isOn = true;
         return true;
       }
+      
+      powerUpData.timerSlow.isOn = true;      
       return false;
     }
   }
