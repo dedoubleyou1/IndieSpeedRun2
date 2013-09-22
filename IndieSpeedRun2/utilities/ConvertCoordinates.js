@@ -3,13 +3,12 @@ goog.provide('utilities.ConvertCoordinates');
 goog.require('goog.math.Vec2');
  
 //Given pizza coordinates, return screen coordinates
-utilities.ConvertCoordinates = function(wedge,row,column)
+utilities.ConvertCoordinates = function(wedge,row,column, triangleHeight)
 {
     //use WEDGE to get the starting angle
     var startAngle = wedge * (Math.PI/4);
     
     //use ROW to figure out the "radius" of that row
-    var triangleHeight = 5;
     var rowRadius = triangleHeight/2 + row*(triangleHeight/2);
     
     //get the two SIDE vectors of this particular wedge @ rowRadius
