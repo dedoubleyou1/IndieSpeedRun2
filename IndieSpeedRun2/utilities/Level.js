@@ -102,14 +102,19 @@ function randomizeLevel(size, triangleHeight, levelData, toppings) {
     for (var j = size- 1; j >= 0; j--) {
       for (var k = j * 2; k >= 0; k--) {
         rand = Math.random();
-        if(rand > .50){
+        if(rand < .4){
           var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
           
           levelData.get(i,j,k).sprite.setFill(utilities.Topping('mushroom').image);;
           levelData.get(i,j,k).isOccupied = true;
           levelData.get(i,j,k).type = 'mushroom';
+        }
+        else if(rand >= .4 && rand < .6){
+          var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
           
-          //          toppings.appendChild(toppingTemp);
+          levelData.get(i,j,k).sprite.setFill('#');
+          levelData.get(i,j,k).isOccupied = true;
+          levelData.get(i,j,k).type = 'olive';
         }
       }
     }
