@@ -5,6 +5,7 @@ goog.provide('utilities.Level');
 goog.require('lime.Scene');
 goog.require('lime.Layer');
 goog.require('lime.Circle');
+goog.require('lime.Sprite');
 goog.require('utilities.NewStruct');
 goog.require('utilities.ConvertCoordinates');
 
