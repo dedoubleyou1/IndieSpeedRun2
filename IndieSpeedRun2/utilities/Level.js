@@ -41,6 +41,7 @@ utilities.Level = function(size, triangleHeight) {
             
             
             //convert NEIGHBORS to pepperonis!
+<<<<<<< HEAD
             var neighborList = levelData.neighbors(i,j,k);
             for(i=0; i<neighborList.length; i++){
               console.log(neighborList);
@@ -50,7 +51,28 @@ utilities.Level = function(size, triangleHeight) {
                 target.toppingType = 'pepperoni';
                 target.sprite.setFill(utilities.Topping('pepperoni').image);
               }
+=======
+
+            var attackNeighbors = function(i,j,k)
+            {
+                var neighborList = levelData.neighbors(i,j,k);
+                
+                for(i=0; i<neighborList.length; i++){
+                  console.log(neighborList);
+                  var target= levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
+                  
+                  if(target.isOccupied && target.toppingType != 'pepperoni'){
+                    target.toppingType = 'pepperoni';
+                    target.sprite.setFill('#FF0000');
+                    attackNeighbors(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
+                  }
+                }
+>>>>>>> 58a082ab313274ed163ff9ad51376ce8b0ea7308
             }
+            
+            attackNeighbors(i,j,k);
+            
+            
             
           }
       })
@@ -80,7 +102,7 @@ function randomizeLevel(size, triangleHeight, levelData, toppings) {
     for (var j = size- 1; j >= 0; j--) {
       for (var k = j * 2; k >= 0; k--) {
         rand = Math.random();
-        if(rand > .75){
+        if(rand > .50){
           var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
           
           levelData.get(i,j,k).sprite.setFill(utilities.Topping('mushroom').image);;
