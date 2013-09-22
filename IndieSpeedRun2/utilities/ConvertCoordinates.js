@@ -1,7 +1,6 @@
 goog.provide('utilities.ConvertCoordinates');
 
 goog.require('goog.math.Vec2');
-
  
 //Given pizza coordinates, return screen coordinates
 utilities.ConvertCoordinates = function(wedge,row,column)
@@ -37,7 +36,6 @@ utilities.ConvertCoordinates = function(wedge,row,column)
     if(column%2 == 0){
         triangleCenter.add(triangleCenter.clone().normalize().scale(offset));
     }else{
-        triangleCenter.add(triangleCenter.clone().normalize().scale(-offset));
         triangleCenter.add(triangleCenter.clone().normalize().scale(offset));
     }
     
