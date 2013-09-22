@@ -38,7 +38,8 @@ utilities.Level = function(size, triangleHeight) {
             levelData.get(i,j,k).toppingType = 'pepperoni';
             levelData.get(i,j,k).isOccupied = true;
             console.log(i, j, k);
-              
+            
+            var chaining = 
 
             var attackNeighbors = function(i,j,k)
             {
