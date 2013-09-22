@@ -44,4 +44,4 @@ utilities.ConvertCoordinates = function(wedge,row,column)
     return triangleCenter;
 };
 
-goog.exportSymbol('utilities.ConvertCoordinates',utilities.ConvertCoordinates);goog.exportSymbol('utilities.ConvertCoordinates',utilities.ConvertCoordinates);
+goog.exportSymbol('utilities.ConvertCoordinates',utilities.ConvertCoordinates);
