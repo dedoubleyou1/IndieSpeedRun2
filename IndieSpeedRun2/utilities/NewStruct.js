@@ -22,7 +22,6 @@ utilities.NewStruct = function(size) {
 
 utilities.NewStruct.prototype.add = function(wedge, row, column, data) {
   this.struct[wedge][row][column] = data;
-  console.log(this.struct);
 };
 
 utilities.NewStruct.prototype.get = function(wedge, row, column) {

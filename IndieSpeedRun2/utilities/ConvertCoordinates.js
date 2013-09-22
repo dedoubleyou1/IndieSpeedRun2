@@ -27,7 +27,7 @@ utilities.ConvertCoordinates = function(wedge,row,column)
     
     //find OFFSET vector based on odd or even?
     
-    return goog.math.Vec2.Sum(sideVector1,centerEdge);
+    return goog.math.Vec2.sum(sideVector1,centerEdge);
 };
 
 goog.exportSymbol('utilities.ConvertCoordinates',utilities.ConvertCoordinates);

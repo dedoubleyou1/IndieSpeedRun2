@@ -37,7 +37,8 @@ IndieSpeedRun2.start = function() {
     scene.appendChild(target);
     scene.appendChild(title);
 
-    var myNewLevel = utilities.Level(3);
+    var myNewLevel = new utilities.Level(3);
+    director.replaceScene(myNewLevel.levelScene);
 
   director.makeMobileWebAppCapable();
 
