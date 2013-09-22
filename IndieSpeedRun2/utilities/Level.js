@@ -50,7 +50,7 @@ utilities.Level = function(size, triangleHeight) {
               if (neighborData.isOccupied) {
                 console.log(neighborList);
                 console.log(neighborData.toppingType);
-                utilities.Topping(neighborData.toppingType).chaining(levelData, wedge, row, column);
+                utilities.Topping(neighborData.toppingType).chaining(levelData,neighborList[x].wedge, neighborList[x].row, neighborList[x].column); //wedge, row, column);
               }
             }
           }
@@ -83,7 +83,7 @@ function randomizeLevel(size, triangleHeight, levelData, toppings) {
         rand = Math.random();
         if(rand < .4){
           var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
-          
+          console.log(utilities);
           levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('mushroom').image);
           levelData.get(wedge, row, column).isOccupied = true;
           levelData.get(wedge, row, column).toppingType = 'mushroom';

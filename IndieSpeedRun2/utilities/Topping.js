@@ -1,6 +1,6 @@
 goog.provide('utilities.Topping');
 
-var toppingTypes = {
+var toppingData = {
   pepperoni: {
     image: 'assets/toppings_pepperoni.png',
     chaining: function(levelData, wedge, row, column){
@@ -12,9 +12,8 @@ var toppingTypes = {
   mushroom: {
     image: 'assets/toppings_mushroom.png',
     chaining: function(levelData, wedge, row, column){
-        this.toppingType = 'pepperoni';
-        this.sprite.setFill(utilities.Topping('pepperoni').image);
-      
+        levelData.get(wedge, row, column).toppingType = 'pepperoni';
+        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);      
         attackNeighbors(levelData, wedge, row, column);
     }
   },
@@ -40,20 +39,22 @@ var toppingTypes = {
 
 utilities.Topping = function(type)
 {
-    return toppingTypes[type];
+    return toppingData[type];
 };
 
 //dat local neighbor check
 function attackNeighbors(levelData, wedge,row,column)
 {
   var neighborList = levelData.neighbors(wedge,row,column);
+
+  console.log(neighborList);
                 
   for(i=0; i<neighborList.length; i++){
-    //console.log(neighborList);
-    var target= levelData.get(neighborList[i].wedge,, neighborList[i].row, neighborList[i].column);
+    console.log('yo');
+    var target = levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
     
-    if(target.isOccupied)
-      target.chaining(levelData,wedge,row,column);
+    if(target.isOccupied && target.toppingType === 'mushroom')
+      toppingData[target.toppingType].chaining(levelData,neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
   }
 }
 
