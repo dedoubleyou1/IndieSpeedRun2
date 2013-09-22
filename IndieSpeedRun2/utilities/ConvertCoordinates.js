@@ -6,7 +6,7 @@ goog.require('goog.math.Vec2');
 utilities.ConvertCoordinates = function(wedge,row,column, triangleHeight)
 {
     //use WEDGE to get the starting angle
-    var startAngle = wedge * (Math.PI/4);
+    var startAngle = wedge * (Math.PI/4);// + 27.5*Math.PI/180;
     
     //use ROW to figure out the "radius" of that row
     var rowRadius = triangleHeight/2 + row*(triangleHeight/2);
