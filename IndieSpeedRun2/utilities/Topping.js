@@ -4,7 +4,7 @@ var toppingData = {
   //PEPPERONI//
   pepperoni: {
     image: 'assets/toppings_pepperoni.png',
-    chaining: function(levelData, wedge, row, column,resultsArray){
+    chaining: function(levelData, wedge, row, column,resultsObject){
       //nothing happens here!
     }
     
@@ -25,8 +25,8 @@ var toppingData = {
   //OLIVES//
   olive: {
     image: 'assets/toppings_olive.png',
-    chaining: function(levelData, wedge, row, column){
-      var neighborTypes = checkNeighbors(levelData,wedge,row,column, resultsObject);
+    chaining: function(levelData, wedge, row, column, resultsObject){
+      var neighborTypes = checkNeighbors(levelData,wedge,row,column);
       var pprCount = 0;
       
       for (var i = neighborTypes.length - 1; i >= 0; i--) {
