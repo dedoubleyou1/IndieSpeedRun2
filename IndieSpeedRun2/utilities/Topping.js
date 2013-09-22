@@ -1,12 +1,20 @@
 goog.provide('utilities.Topping');
 
 var TYPE = {
-        pepperoni: 1,
-        mushroom: 2,
-        olives: 3,
-        bacon: 4,
-        buffaloChicken: 5,
-        anchovies: 6
+        pepperoni: {
+            image: 'assets/toppings-pepperoni.png'
+        },
+        mushroom: {
+            image: 'assets/toppings-mushroom.png'
+        },
+        olive: {
+            image: 'assets/toppings-olive.png'
+        },
+        anchovy: {
+            image: 'assets/toppings-anchovy.png'
+        }
+        // bacon: 4,
+        // buffaloChicken: 5,
 };
 
 utilities.Topping = function(type)
