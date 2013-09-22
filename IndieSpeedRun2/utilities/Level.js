@@ -8,6 +8,7 @@ goog.require('lime.Circle');
 goog.require('lime.Sprite');
 goog.require('utilities.NewStruct');
 goog.require('utilities.ConvertCoordinates');
+goog.require('utilities.Topping');
 
 utilities.Level = function(size, triangleHeight) {
 
@@ -33,7 +34,7 @@ utilities.Level = function(size, triangleHeight) {
       goog.events.listen(newCircle,'click', function(e){
           if(!levelData.get(i,j,k).isOccupied){
             //place a PEPPERONI
-            newCircle.setFill('#FF0000'); //.setFill(30*i,90*j,60*k);
+            newCircle.setFill(utilities.Topping('pepperoni').image); //.setFill(30*i,90*j,60*k);
             levelData.get(i,j,k).toppingType = 'pepperoni';
             levelData.get(i,j,k).isOccupied = true;
             console.log(i, j, k);
@@ -47,7 +48,7 @@ utilities.Level = function(size, triangleHeight) {
               
               if(target.isOccupied && target.toppingType != 'pepperoni'){
                 target.toppingType = 'pepperoni';
-                target.sprite.setFill('#FF0000');
+                target.sprite.setFill(utilities.Topping('pepperoni').image);
               }
             }
             
@@ -82,7 +83,7 @@ function randomizeLevel(size, triangleHeight, levelData, toppings) {
         if(rand > .75){
           var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
           
-          levelData.get(i,j,k).sprite.setFill('#BBBBBB');
+          levelData.get(i,j,k).sprite.setFill(utilities.Topping('mushroom').image);;
           levelData.get(i,j,k).isOccupied = true;
           levelData.get(i,j,k).type = 'mushroom';
           
