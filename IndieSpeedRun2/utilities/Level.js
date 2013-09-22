@@ -19,7 +19,6 @@ utilities.Level = function(size, triangleHeight) {
   newLevel.appendChild(levelBackground);
   var toppings = new lime.Layer().setPosition(512, 384);
   var levelData = new utilities.NewStruct(size);
-  var powerUp = 
   
   function initToppingsFunc(wedge, row, column) {   
     return function() {
@@ -45,10 +44,11 @@ utilities.Level = function(size, triangleHeight) {
             
             //Check Neighbor Triggers
             resultsArray = [];
+            var resultsObject = {};
             for (var x = neighborList.length - 1; x >= 0; x--) {
               var neighborData = levelData.get(neighborList[x].wedge, neighborList[x].row, neighborList[x].column);
               if (neighborData.isOccupied) {
-                var temp = utilities.Topping(neighborData.toppingType).chaining(levelData,neighborList[x].wedge, neighborList[x].row, neighborList[x].column); //wedge, row, column);
+                var temp = utilities.Topping(neighborData.toppingType).chaining(levelData,neighborList[x].wedge, neighborList[x].row, neighborList[x].column, resultsObject); //wedge, row, column);
                 resultsArray.push(temp);
               }
             }

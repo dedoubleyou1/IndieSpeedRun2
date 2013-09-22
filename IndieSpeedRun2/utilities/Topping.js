@@ -4,7 +4,7 @@ var toppingData = {
   //PEPPERONI//
   pepperoni: {
     image: 'assets/toppings_pepperoni.png',
-    chaining: function(levelData, wedge, row, column){
+    chaining: function(levelData, wedge, row, column,resultsArray){
       //nothing happens here!
     }
     
@@ -13,11 +13,12 @@ var toppingData = {
   //MUSHROOM//
   mushroom: {
     image: 'assets/toppings_mushroom.png',
-    chaining: function(levelData, wedge, row, column){
-        //turn into a pepperoni and ATTACK!!    
+    chaining: function(levelData, wedge, row, column, resultsObject){
+        //turn into a pepperoni and ATTACK!!
         levelData.get(wedge, row, column).toppingType = 'pepperoni';
-        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);      
-        attackNeighbors(levelData, wedge, row, column);
+        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);
+        resultsObject.mushroom++;
+        attackNeighbors(levelData, wedge, row, column, resultsObject);
     }
   },
   
@@ -25,7 +26,7 @@ var toppingData = {
   olive: {
     image: 'assets/toppings_olive.png',
     chaining: function(levelData, wedge, row, column){
-      var neighborTypes = checkNeighbors(levelData,wedge,row,column);
+      var neighborTypes = checkNeighbors(levelData,wedge,row,column, resultsObject);
       var pprCount = 0;
       
       for (var i = neighborTypes.length - 1; i >= 0; i--) {
@@ -36,8 +37,9 @@ var toppingData = {
       if(pprCount >= 2){
         //turn into a pepperoni and ATTACK!!
         levelData.get(wedge, row, column).toppingType = 'pepperoni';
-        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);      
-        attackNeighbors(levelData, wedge, row, column);
+        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);
+        resultsObject.olive++;
+        return attackNeighbors(levelData, wedge, row, column, resultsObject);
       }
     }
   },
@@ -45,7 +47,7 @@ var toppingData = {
   //ANCHOVY//
   anchovy: {
     image: 'assets/toppings_anchovy.png',
-    chaining: function(levelData, wedge, row, column){
+    chaining: function(levelData, wedge, row, column, resultsObject){
       var neighborTypes = checkNeighbors(levelData,wedge,row,column);
       var pprCount = 0;
       
@@ -57,8 +59,9 @@ var toppingData = {
       if(pprCount == 3){
         //turn into a pepperoni and ATTACK!!
         levelData.get(wedge, row, column).toppingType = 'pepperoni';
-        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);      
-        attackNeighbors(levelData, wedge, row, column);
+        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);
+        resultsObject.anchovy++;
+        return attackNeighbors(levelData, wedge, row, column, resultsObject);
       }
     }
   }
@@ -74,17 +77,21 @@ utilities.Topping = function(type)
 };
 
 //dat local neighbor check
-function attackNeighbors(levelData, wedge,row,column)
+function attackNeighbors(levelData, wedge,row,column, resultsObject)
 {
+  //TALLYING
+  levelData.get(wedge,row,column).toppingType;
+
   var neighborList = levelData.neighbors(wedge,row,column);
   
   for (var i = neighborList.length - 1; i >= 0; i--) {
     var target = levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
     
     if(target.isOccupied && target.toppingType != 'pepperoni')
-      toppingData[target.toppingType].chaining(levelData,neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
+      toppingData[target.toppingType].chaining(levelData,neighborList[i].wedge, neighborList[i].row, neighborList[i].column, resultsObject);
   }
 }
+
 
 function checkNeighbors(levelData, wedge,row,column)
 {
