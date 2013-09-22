@@ -71,9 +71,6 @@ utilities.Level = function(size, triangleHeight) {
             }
             
             attackNeighbors(i,j,k);
-            
-            
-            
           }
       })
     };
