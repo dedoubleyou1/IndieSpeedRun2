@@ -48,8 +48,7 @@ function attackNeighbors(levelData, wedge,row,column)
   var neighborList = levelData.neighbors(wedge,row,column);
 
   console.log(neighborList);
-                
-  for(i=0; i<neighborList.length; i++){
+  for (var i = neighborList.length - 1; i >= 0; i--) {
     console.log('yo');
     var target = levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
     
