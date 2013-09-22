@@ -29,8 +29,8 @@ IndieSpeedRun2.start = function(){
 
 
 
-    //dataStruct.add(0,0,0, {});
-    //dataStruct.neighbors(0,0,0);
+    dataStruct.add(0,0,0, {junk: "data"});
+    dataStruct.neighbors(0,0,0);
 
     //add circle and label to target object
     target.appendChild(circle);

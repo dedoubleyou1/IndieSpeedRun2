@@ -14,14 +14,15 @@ utilities.NewStruct = function(size) {
     this.struct.push(rows);
   }
   this.size = size;
-  this.wedgesAvailable = [];
+  this.wedgeAvailable = [];
   for (var i = 7; i >= 0; i--) {
-        this.wedgesAvailable.push(true);
+        this.wedgeAvailable.push(true);
   }
 };
 
 utilities.NewStruct.prototype.add = function(wedge, row, column, data) {
   this.struct[wedge][row][column] = data;
+  console.log(this.struct);
 };
 
 utilities.NewStruct.prototype.get = function(wedge, row, column) {
@@ -59,7 +60,7 @@ utilities.NewStruct.prototype.neighbors = function(wedge, row, column) {
     columnCW = 0;
   }
 
-  if (this.wedgesAvailable(wedgeCW)) {
+  if (this.wedgeAvailable[wedgeCW]) {
     neighborList.push({
       wedge: wedgeCW,
       column: columnCW,
@@ -67,7 +68,7 @@ utilities.NewStruct.prototype.neighbors = function(wedge, row, column) {
     });
   }
 
-  if (this.wedgesAvailable(wedgeCCW)) {
+  if (this.wedgeAvailable[wedgeCCW]) {
     neighborList.push({
       wedge: wedgeCCW,
       column: columnCCW,
