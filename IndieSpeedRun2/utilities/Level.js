@@ -19,11 +19,10 @@ utilities.Level = function(size, triangleHeight) {
   newLevel.appendChild(levelBackground);
   var toppings = new lime.Layer().setPosition(512, 384);
   var levelData = new utilities.NewStruct(size);
+  var powerUp = 
   
   function initToppingsFunc(wedge, row, column) {   
     return function() {
-      console.log(wedge, row, column);
-
 
       var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
       var newCircle = new lime.Circle().setSize(40,40).setFill(0,0,0,0).setPosition(myCoordinates.x, myCoordinates.y);
@@ -33,7 +32,6 @@ utilities.Level = function(size, triangleHeight) {
 
       //HANDLE mouse clicks
       goog.events.listen(newCircle,'click', function(e){
-          console.log(wedge, row, column);
           
           var thisTopping = levelData.get(wedge, row, column);
 
@@ -45,13 +43,27 @@ utilities.Level = function(size, triangleHeight) {
             thisTopping.isOccupied = true;
             var neighborList = levelData.neighbors(wedge, row, column);
             
+            //Check Neighbor Triggers
+            resultsArray = [];
             for (var x = neighborList.length - 1; x >= 0; x--) {
               var neighborData = levelData.get(neighborList[x].wedge, neighborList[x].row, neighborList[x].column);
               if (neighborData.isOccupied) {
-                console.log(neighborList);
-                console.log(neighborData.toppingType);
-                utilities.Topping(neighborData.toppingType).chaining(levelData,neighborList[x].wedge, neighborList[x].row, neighborList[x].column); //wedge, row, column);
+                var temp = utilities.Topping(neighborData.toppingType).chaining(levelData,neighborList[x].wedge, neighborList[x].row, neighborList[x].column); //wedge, row, column);
+                resultsArray.push(temp);
               }
+            }
+
+            //Tally up results from placement
+            finalTally = {};
+            for (var i = resultsArray.length - 1; i >= 0; i--) {
+              var propertyNames = Object.getOwnPropertyNames(resultsArray[i])
+              for (var j = propertyNames.length - 1; j >= 0; j--) {
+                if (finalTally.hasOwnProperty(propertyNames[j])) {
+                  finalTally[propertyNames[j]] += resultsArray[i][propertyNames[j]];
+                } else {
+                  finalTally[propertyNames[j]] = resultsArray[i][propertyNames[j]];
+                }
+              };
             }
           }
       })
@@ -83,7 +95,6 @@ function randomizeLevel(size, triangleHeight, levelData, toppings) {
         rand = Math.random();
         if(rand < .2){
           var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
-          console.log(utilities);
           levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('mushroom').image);
           levelData.get(wedge, row, column).isOccupied = true;
           levelData.get(wedge, row, column).toppingType = 'mushroom';
