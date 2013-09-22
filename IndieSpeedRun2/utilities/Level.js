@@ -14,12 +14,12 @@ utilities.Level = function(size) {
   var levelData = new utilities.NewStruct(size);
   for (var i = 7; i >= 0; i--) {
     for (var j = size - 1; j >= 0; j--) {
-      for (var k = j * 2 - 1; k >= 0; k--) {
+      for (var k = j * 2; k >= 0; k--) {
         levelData.add(i, j, k, {junk: "data"});
         var myCoordinates = utilities.ConvertCoordinates(i, j, k);
-        var newCircle = new lime.Circle().setSize(20,20).setFill(255,150,0).setPosition(myCoordinates.x, myCoordinates.y);
+        var newCircle = new lime.Circle().setSize(25,25).setFill(i*20,j*10,k*5).setPosition(20 * myCoordinates.x, 20 * myCoordinates.y);
         toppings.appendChild(newCircle);
-        console.log(myCoordinates);
+        console.log(i, j, k, myCoordinates);
       }
     }
   }
