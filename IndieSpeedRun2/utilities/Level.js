@@ -38,20 +38,7 @@ utilities.Level = function(size, triangleHeight) {
             levelData.get(i,j,k).toppingType = 'pepperoni';
             levelData.get(i,j,k).isOccupied = true;
             console.log(i, j, k);
-            
-            
-            //convert NEIGHBORS to pepperonis!
-<<<<<<< HEAD
-            var neighborList = levelData.neighbors(i,j,k);
-            for(i=0; i<neighborList.length; i++){
-              console.log(neighborList);
-              var target= levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
               
-              if(target.isOccupied && target.toppingType != 'pepperoni'){
-                target.toppingType = 'pepperoni';
-                target.sprite.setFill(utilities.Topping('pepperoni').image);
-              }
-=======
 
             var attackNeighbors = function(i,j,k)
             {
@@ -63,11 +50,10 @@ utilities.Level = function(size, triangleHeight) {
                   
                   if(target.isOccupied && target.toppingType != 'pepperoni'){
                     target.toppingType = 'pepperoni';
-                    target.sprite.setFill('#FF0000');
+                    target.sprite.setFill(utilities.Topping('pepperoni').image);
                     attackNeighbors(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
                   }
                 }
->>>>>>> 58a082ab313274ed163ff9ad51376ce8b0ea7308
             }
             
             attackNeighbors(i,j,k);
