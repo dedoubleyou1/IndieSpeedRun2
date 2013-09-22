@@ -4,7 +4,7 @@ var toppingData = {
   pepperoni: {
     image: 'assets/toppings_pepperoni.png',
     chaining: function(levelData, wedge, row, column){
-      
+      //nothing happens here!
     }
     
   },
@@ -21,14 +21,28 @@ var toppingData = {
   olive: {
     image: 'assets/toppings_olive.png',
     chaining: function(levelData, wedge, row, column){
+      var neighborTypes = checkNeighbors(levelData,wedge,row,column);
+      var pprCount = 0;
       
+      console.log(neighborTypes);
+      
+      for (var i = neighborTypes.length - 1; i >= 0; i--) {
+        if(neighborTypes[i] == 'pepperoni')
+          pprCount++;
+      }
+      
+      if(pprCount >= 2){
+        //turn into a pepperoni and ATTACK!!
+        levelData.get(wedge, row, column).toppingType = 'pepperoni';
+        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);      
+        attackNeighbors(levelData, wedge, row, column);
+      }
     }
   },
   
   anchovy: {
     image: 'assets/toppings_anchovy.png',
     chaining: function(levelData, wedge, row, column){
-      
     }
   }
   
@@ -46,15 +60,28 @@ utilities.Topping = function(type)
 function attackNeighbors(levelData, wedge,row,column)
 {
   var neighborList = levelData.neighbors(wedge,row,column);
-
-  console.log(neighborList);
+  
   for (var i = neighborList.length - 1; i >= 0; i--) {
-    console.log('yo');
     var target = levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
     
-    if(target.isOccupied && target.toppingType === 'mushroom')
+    if(target.isOccupied && target.toppingType != 'pepperoni')
       toppingData[target.toppingType].chaining(levelData,neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
   }
+}
+
+function checkNeighbors(levelData, wedge,row,column)
+{
+  var neighborList = levelData.neighbors(wedge,row,column);
+  var neighborTypes = [];
+  
+  for (var i = neighborList.length - 1; i >= 0; i--) {
+    var target = levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
+    
+    if(target.isOccupied)
+      neighborTypes.push(target.toppingType);
+  }
+  
+  return neighborTypes;
 }
 
 
@@ -82,5 +109,4 @@ var attackNeighbors = function(wedge,row,column)
             }
             
 attackNeighbors(wedge,row,column);
-
 */
