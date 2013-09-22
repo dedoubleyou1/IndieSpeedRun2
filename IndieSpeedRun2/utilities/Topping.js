@@ -6,8 +6,10 @@ var toppingData = {
     image: 'assets/toppings_pepperoni.png',
     chaining: function(levelData, wedge, row, column,resultsObject){
       //nothing happens here!
+    },
+    powerUp: function(levelData, wedge, row, column, strength){
+      //nuttin here either
     }
-    
   },
   
   //MUSHROOM//
@@ -19,6 +21,13 @@ var toppingData = {
         levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);
         resultsObject.mushroom++;
         attackNeighbors(levelData, wedge, row, column, resultsObject);
+    },
+    powerUp: function(levelData, wedge, row, column, strength){
+      if(strength >= 4){
+        
+        return true;
+      }
+      return false;
     }
   },
   
@@ -41,6 +50,14 @@ var toppingData = {
         resultsObject.olive++;
         return attackNeighbors(levelData, wedge, row, column, resultsObject);
       }
+    },
+    
+    powerUp: function(levelData, wedge, row, column, strength){
+      if(strength >= 2){
+        
+        return true;
+      }
+      return false;
     }
   },
   
@@ -63,6 +80,13 @@ var toppingData = {
         resultsObject.anchovy++;
         return attackNeighbors(levelData, wedge, row, column, resultsObject);
       }
+    },
+    powerUp: function(levelData, wedge, row, column, strength){
+      if(strength >= 1){
+        
+        return true;
+      }
+      return false;
     }
   }
   
