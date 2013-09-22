@@ -48,13 +48,17 @@ utilities.Level = function(size, triangleHeight) {
                   console.log(neighborList);
                   var target= levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
                   
-                  if(target.isOccupied && target.toppingType != 'pepperoni'){
+                  if(!target.isOccupied)
+                    return;
+                  
+                  if(target.toppingType == 'mushroom'){
                     target.toppingType = 'pepperoni';
                     target.sprite.setFill(utilities.Topping('pepperoni').image);
                     attackNeighbors(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
                   }
                 }
             }
+            
             attackNeighbors(i,j,k);
             
           }
