@@ -19,7 +19,7 @@ utilities.Level = function(size, triangleHeight) {
   newLevel.appendChild(levelBackground);
   var toppings = new lime.Layer().setPosition(512, 384);
   var levelData = new utilities.NewStruct(size);
-  var powerUps = {};
+  var powerUps = false;
 
   function initToppingsFunc(wedge, row, column) {
     return function() {
@@ -43,9 +43,15 @@ utilities.Level = function(size, triangleHeight) {
             thisTopping.isOccupied = true;
             var neighborList = levelData.neighbors(wedge, row, column);
 
-            var powerUpProperties = Object.getOwnPropertyNames(powerUps);
-            for (var i = powerUpProperties.length - 1; i >= 0; i--) {
-            //  powerUps[powerUpProperties[i]]
+            console.log(powerUps);
+
+            if (!!powerUps) {
+              var powerUpProperties = Object.getOwnPropertyNames(powerUps);
+              for (var i = powerUpProperties.length - 1; i >= 0; i--) {
+                if (powerUps[powerUpProperties[i]] > 0) {
+                  utilities.Topping(powerUpProperties[i]).powerUp(levelData, wedge, row, column)
+                }
+              }
             }
 
             //Check Neighbor Triggers
@@ -53,24 +59,11 @@ utilities.Level = function(size, triangleHeight) {
             for (var x = neighborList.length - 1; x >= 0; x--) {
               var neighborData = levelData.get(neighborList[x].wedge, neighborList[x].row, neighborList[x].column);
               if (neighborData.isOccupied) {
-                var temp = utilities.Topping(neighborData.toppingType).chaining(levelData, neighborList[x].wedge, neighborList[x].row, neighborList[x].column, resultsObject); //wedge, row, column);
-                console.log(resultsObject);
+                utilities.Topping(neighborData.toppingType).chaining(levelData, neighborList[x].wedge, neighborList[x].row, neighborList[x].column, resultsObject); //wedge, row, column);
               }
             }
-
-            //Tally up results from placement
-            // finalTally = {};
-            // for (var i = resultsArray.length - 1; i >= 0; i--) {
-            //   var propertyNames = Object.getOwnPropertyNames(resultsArray[i]);
-            //   for (var j = propertyNames.length - 1; j >= 0; j--) {
-            //     if (finalTally.hasOwnProperty(propertyNames[j])) {
-            //       finalTally[propertyNames[j]] += resultsArray[i][propertyNames[j]];
-            //     } else {
-            //       finalTally[propertyNames[j]] = resultsArray[i][propertyNames[j]];
-            //     }
-            //   }
-            // }
-            // powerUps = finalTally;
+            console.log(resultsObject);
+            powerUps = resultsObject;
           }
       });
     };
