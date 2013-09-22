@@ -24,7 +24,7 @@ utilities.Level = function(size, triangleHeight) {
 
       levelData.add(i, j, k, {junk: "data"});
       var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
-      var newCircle = new lime.Circle().setSize(38,38).setFill(0,0,0,0).setPosition(20 * myCoordinates.x, 20 * myCoordinates.y);
+      var newCircle = new lime.Circle().setSize(40,40).setFill(0,0,0,0).setPosition(myCoordinates.x, myCoordinates.y);
       toppings.appendChild(newCircle);
 
       goog.events.listen(newCircle,'click', function(e){
