@@ -30,13 +30,13 @@ utilities.ConvertCoordinates = function(wedge,row,column)
     
     var triangleCenter = goog.math.Vec2.sum(sideVector1,centerEdge);
     
-    var offset = triangleHeight/16;
+    var offset = triangleHeight/12;
     
     //find OFFSET vector based on odd or even?
     if(column%2 == 0){
         triangleCenter.add(triangleCenter.clone().normalize().scale(offset));
     }else{
-        triangleCenter.add(triangleCenter.clone().normalize().scale(offset));
+        triangleCenter.add(triangleCenter.clone().normalize().scale(-offset));
     }
     
     return triangleCenter;
