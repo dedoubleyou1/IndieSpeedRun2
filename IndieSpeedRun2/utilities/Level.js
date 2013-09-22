@@ -19,6 +19,10 @@ utilities.Level = function(size, triangleHeight) {
   newLevel.appendChild(levelBackground);
   var toppings = new lime.Layer().setPosition(512, 384);
   var levelData = new utilities.NewStruct(size);
+<<<<<<< HEAD
+=======
+  var powerUps = {};
+>>>>>>> 267a0c2465feabce947a12cff8674db060b0849d
   
   function initToppingsFunc(wedge, row, column) {   
     return function() {
@@ -41,6 +45,11 @@ utilities.Level = function(size, triangleHeight) {
             thisTopping.toppingType = 'pepperoni';
             thisTopping.isOccupied = true;
             var neighborList = levelData.neighbors(wedge, row, column);
+
+            var powerUpProperties = Object.getOwnPropertyNames(powerUps);
+            for (var i = powerUpProperties.length - 1; i >= 0; i--) {
+              powerUps[powerUpProperties[i]]
+            };
             
             //Check Neighbor Triggers
             resultsArray = [];
@@ -63,8 +72,9 @@ utilities.Level = function(size, triangleHeight) {
                 } else {
                   finalTally[propertyNames[j]] = resultsArray[i][propertyNames[j]];
                 }
-              };
+              }
             }
+            powerUps= = finalTally;
           }
       })
     };
