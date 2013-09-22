@@ -15,6 +15,7 @@ var TYPE = {
         }
         // bacon: 4,
         // buffaloChicken: 5,
+
 };
 
 utilities.Topping = function(type)
