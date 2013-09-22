@@ -12,25 +12,22 @@ goog.require('lime.animation.Spawn');
 goog.require('lime.animation.FadeTo');
 goog.require('lime.animation.ScaleTo');
 goog.require('lime.animation.MoveTo');
-goog.require('utilities.NewStruct');
+goog.require('utilities.Level');
 
 
 // entrypoint
-IndieSpeedRun2.start = function(){
 
-	var director = new lime.Director(document.body,1024,768),
-	    scene = new lime.Scene(),
-        dataStruct = new utilities.NewStruct(2),
-	    target = new lime.Layer().setPosition(512,384),
+IndieSpeedRun2.start = function() {
+
+  var director = new lime.Director(document.body,1024,768),
+      scene = new lime.Scene(),
+      target = new lime.Layer().setPosition(512,384),
         circle = new lime.Circle().setSize(150,150).setFill(255,150,0),
         lbl = new lime.Label().setSize(160,50).setFontSize(30).setText('TOUCH ME!'),
         title = new lime.Label().setSize(800,70).setFontSize(60).setText('Now move me around!')
             .setOpacity(0).setPosition(512,80).setFontColor('#999').setFill(200,100,0,.1);
 
 
-
-    dataStruct.add(0,0,0, {junk: "data"});
-    dataStruct.neighbors(0,0,0);
 
     //add circle and label to target object
     target.appendChild(circle);
@@ -40,7 +37,7 @@ IndieSpeedRun2.start = function(){
     scene.appendChild(target);
     scene.appendChild(title);
 
-	director.makeMobileWebAppCapable();
+  director.makeMobileWebAppCapable();
 
     //add some interaction
     goog.events.listen(target,['mousedown','touchstart'],function(e){
@@ -70,8 +67,8 @@ IndieSpeedRun2.start = function(){
 
     });
 
-	// set current scene active
-	director.replaceScene(scene);
+  // set current scene active
+  director.replaceScene(scene);
 
 }
 
