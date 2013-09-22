@@ -35,32 +35,15 @@ utilities.Level = function(size, triangleHeight) {
           if(!levelData.get(i,j,k).isOccupied){
             //place a PEPPERONI
             newCircle.setFill(utilities.Topping('pepperoni').image); //.setFill(30*i,90*j,60*k);
-            levelData.get(i,j,k).toppingType = 'pepperoni';
-            levelData.get(i,j,k).isOccupied = true;
-            console.log(i, j, k);
+            var thisTopping = levelData.get(i,j,k);
+            thisTopping.toppingType = 'pepperoni';
+            thisTopping.isOccupied = true;
+            var neighborList = levelData.neighbors(i, j, k);
             
-            var chaining = 
-
-            var attackNeighbors = function(i,j,k)
-            {
-                var neighborList = levelData.neighbors(i,j,k);
-                
-                for(i=0; i<neighborList.length; i++){
-                  console.log(neighborList);
-                  var target= levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
-                  
-                  if(!target.isOccupied)
-                    return;
-                  
-                  if(target.toppingType == 'mushroom'){
-                    target.toppingType = 'pepperoni';
-                    target.sprite.setFill(utilities.Topping('pepperoni').image);
-                    attackNeighbors(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
-                  }
-                }
-            }
-            
-            attackNeighbors(i,j,k);
+            for (var i = neighborList.length - 1; i >= 0; i--) {
+              if neighborList[i].isOccupied
+              utilities.Topping(neighborList[i].toppingType).chaining(levelData, i, j, k);
+            };
             
           }
       })
