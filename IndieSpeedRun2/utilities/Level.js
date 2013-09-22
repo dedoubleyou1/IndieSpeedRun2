@@ -20,41 +20,49 @@ utilities.Level = function(size, triangleHeight) {
   var toppings = new lime.Layer().setPosition(512, 384);
   var levelData = new utilities.NewStruct(size);
   
-  function initToppingsFunc(i, j, k) {   
+  function initToppingsFunc(wedge, row, column) {   
     return function() {
+      console.log(wedge, row, column);
 
 
-      var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
+      var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
       var newCircle = new lime.Circle().setSize(40,40).setFill(0,0,0,0).setPosition(myCoordinates.x, myCoordinates.y);
       toppings.appendChild(newCircle);
 
-      levelData.add(i, j, k, {toppingType: 'empty', sprite: newCircle, isOccupied: false});
+      levelData.add(wedge, row, column, {toppingType: 'empty', sprite: newCircle, isOccupied: false});
 
       //HANDLE mouse clicks
       goog.events.listen(newCircle,'click', function(e){
-          if(!levelData.get(i,j,k).isOccupied){
+          console.log(wedge, row, column);
+          
+          var thisTopping = levelData.get(wedge, row, column);
+
+          if(!thisTopping.isOccupied){
             //place a PEPPERONI
-            newCircle.setFill(utilities.Topping('pepperoni').image); //.setFill(30*i,90*j,60*k);
-            var thisTopping = levelData.get(i,j,k);
+            newCircle.setFill(utilities.Topping('pepperoni').image); //.setFill(30*i,90*row,60*k);
+            var thisTopping = levelData.get(wedge, row, column);
             thisTopping.toppingType = 'pepperoni';
             thisTopping.isOccupied = true;
-            var neighborList = levelData.neighbors(i, j, k);
+            var neighborList = levelData.neighbors(wedge, row, column);
             
-            for (var i = neighborList.length - 1; i >= 0; i--) {
-              if neighborList[i].isOccupied
-              utilities.Topping(neighborList[i].toppingType).chaining(levelData, i, j, k);
-            };
-            
+            for (var x = neighborList.length - 1; x >= 0; x--) {
+              var neighborData = levelData.get(neighborList[x].wedge, neighborList[x].row, neighborList[x].column);
+              if (neighborData.isOccupied) {
+                console.log(neighborList);
+                console.log(neighborData.toppingType);
+                utilities.Topping(neighborData.toppingType).chaining(levelData, wedge, row, column);
+              }
+            }
           }
       })
     };
   }
 
-  for (var i = 7; i >= 0; i--) {
-    for (var j = size - 1; j >= 0; j--) {
-      for (var k = j * 2; k >= 0; k--) {
+  for (var wedge = 7; wedge >= 0; wedge--) {
+    for (var row = size - 1; row >= 0; row--) {
+      for (var column = row * 2; column >= 0; column--) {
 
-        (initToppingsFunc(i, j, k))();
+        (initToppingsFunc(wedge, row, column))();
 
       }
     }
@@ -69,23 +77,23 @@ utilities.Level = function(size, triangleHeight) {
 function randomizeLevel(size, triangleHeight, levelData, toppings) {
   var rand = 0;
 
-  for (var i = 7; i >= 0; i--) {
-    for (var j = size- 1; j >= 0; j--) {
-      for (var k = j * 2; k >= 0; k--) {
+  for (var wedge = 7; wedge >= 0; wedge--) {
+    for (var row = size - 1; row >= 0; row--) {
+      for (var column = row * 2; column >= 0; column--) {
         rand = Math.random();
         if(rand < .4){
-          var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
+          var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
           
-          levelData.get(i,j,k).sprite.setFill(utilities.Topping('mushroom').image);
-          levelData.get(i,j,k).isOccupied = true;
-          levelData.get(i,j,k).type = 'mushroom';
+          levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('mushroom').image);
+          levelData.get(wedge, row, column).isOccupied = true;
+          levelData.get(wedge, row, column).toppingType = 'mushroom';
         }
         else if(rand >= .4 && rand < .6){
-          var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
+          var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
           
-          levelData.get(i,j,k).sprite.setFill(utilities.Topping('olive').image);
-          levelData.get(i,j,k).isOccupied = true;
-          levelData.get(i,j,k).type = 'olive';
+          levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('olive').image);
+          levelData.get(wedge, row, column).isOccupied = true;
+          levelData.get(wedge, row, column).toppingType = 'olive';
         }
       }
     }
