@@ -1,5 +1,24 @@
 goog.provide('utilities.Topping');
 
+var powerUpData = {
+  stacking: {
+    isOn: false,
+    number: 2
+  },
+  timerSlow: {
+    isOn: false,
+    timeDamper: .5 //half times speed!
+  },
+  areaOfEffect: {
+    isOn: false,
+    fillSize: 1
+  },
+  bomb: {
+    isOn: false,
+    numMortars: 5
+  }
+};
+
 var toppingData = {
   //PEPPERONI//
   pepperoni: {
