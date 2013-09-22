@@ -49,12 +49,12 @@ utilities.Level = function(size, triangleHeight) {
             }
 
             //Check Neighbor Triggers
-            var resultsObject = {};
+            var resultsObject = {mushroom: 0, olive: 0, anchovy: 0};
             for (var x = neighborList.length - 1; x >= 0; x--) {
               var neighborData = levelData.get(neighborList[x].wedge, neighborList[x].row, neighborList[x].column);
               if (neighborData.isOccupied) {
                 var temp = utilities.Topping(neighborData.toppingType).chaining(levelData, neighborList[x].wedge, neighborList[x].row, neighborList[x].column, resultsObject); //wedge, row, column);
-                console.log(temp);
+                console.log(resultsObject);
               }
             }
 
