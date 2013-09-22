@@ -49,29 +49,28 @@ utilities.Level = function(size, triangleHeight) {
             }
 
             //Check Neighbor Triggers
-            resultsArray = [];
             var resultsObject = {};
             for (var x = neighborList.length - 1; x >= 0; x--) {
               var neighborData = levelData.get(neighborList[x].wedge, neighborList[x].row, neighborList[x].column);
               if (neighborData.isOccupied) {
                 var temp = utilities.Topping(neighborData.toppingType).chaining(levelData, neighborList[x].wedge, neighborList[x].row, neighborList[x].column, resultsObject); //wedge, row, column);
-                resultsArray.push(temp);
+                console.log(temp);
               }
             }
 
             //Tally up results from placement
-            finalTally = {};
-            for (var i = resultsArray.length - 1; i >= 0; i--) {
-              var propertyNames = Object.getOwnPropertyNames(resultsArray[i]);
-              for (var j = propertyNames.length - 1; j >= 0; j--) {
-                if (finalTally.hasOwnProperty(propertyNames[j])) {
-                  finalTally[propertyNames[j]] += resultsArray[i][propertyNames[j]];
-                } else {
-                  finalTally[propertyNames[j]] = resultsArray[i][propertyNames[j]];
-                }
-              }
-            }
-            powerUps = finalTally;
+            // finalTally = {};
+            // for (var i = resultsArray.length - 1; i >= 0; i--) {
+            //   var propertyNames = Object.getOwnPropertyNames(resultsArray[i]);
+            //   for (var j = propertyNames.length - 1; j >= 0; j--) {
+            //     if (finalTally.hasOwnProperty(propertyNames[j])) {
+            //       finalTally[propertyNames[j]] += resultsArray[i][propertyNames[j]];
+            //     } else {
+            //       finalTally[propertyNames[j]] = resultsArray[i][propertyNames[j]];
+            //     }
+            //   }
+            // }
+            // powerUps = finalTally;
           }
       });
     };
