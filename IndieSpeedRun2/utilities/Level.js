@@ -17,7 +17,7 @@ utilities.Level = function(size) {
       for (var k = j * 2 - 1; k >= 0; k--) {
         levelData.add(i, j, k, {junk: "data"});
         var myCoordinates = utilities.ConvertCoordinates(i, j, k);
-        var newCircle = new lime.Circle().setSize(50,50).setFill(255,150,0).setPosition(myCoordinates.x, myCoordinates.y);
+        var newCircle = new lime.Circle().setSize(20,20).setFill(255,150,0).setPosition(myCoordinates.x, myCoordinates.y);
         toppings.appendChild(newCircle);
         console.log(myCoordinates);
       }
