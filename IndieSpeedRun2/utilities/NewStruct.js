@@ -33,32 +33,35 @@ utilities.NewStruct.prototype.neighbors = function(wedge, row, column) {
 
   var wedgeCCW;
   var wedgeCW;
+  
   var columnCCW;
   var columnCW;
-  var rowDir; /////////////
-
-  if (wedge === 0) {
-    wedgeCCW = 7;
-    wedgeCW = 1;
-  } else if (wedge === 7) {
-    wedgeCCW = 6;
-    wedgeCW = 0;
-  } else {
-    wedgeCCW = wedge - 1;
-    wedgeCW = wedge + 1;
-  }
-
+  
+  //var rowDir;
+  columnCCW = column - 1;
+  columnCW = column + 1;
+  wedgeCCW = wedge;
+  wedgeCW = wedge;
+  
   if (column === 0) {
     columnCCW = row * 2;
-    columnCW = 1;
-  } else if (column === row * 2) {
-    columnCCW = row * 2 - 1;
+    if (wedge === 0) {
+      wedgeCCW = 7;
+    } else {
+      wedgeCCW = wedge - 1;
+    }
+  }
+  
+  if (column === row * 2) {
     columnCW = 0;
-  } else if (column === row * 2) {
-    columnCCW = row * 2 - 1;
-    columnCW = 0;
+    if (wedge === 7) {
+      wedgeCW = 0;
+    } else {
+      wedgeCW = wedge + 1;
+    }
   }
 
+  //IF wedge is available = push the data
   if (this.wedgeAvailable[wedgeCW]) {
     neighborList.push({
       wedge: wedgeCW,
@@ -74,20 +77,23 @@ utilities.NewStruct.prototype.neighbors = function(wedge, row, column) {
       row: row
     });
   }
-
+  
+  //
   if (column % 2 !== 0) {
     neighborList.push({
       wedge: wedge,
-      column: column,
+      column: column-1,
       row: row - 1
     });
   } else if (row < this.size - 1) {
     neighborList.push({
       wedge: wedge,
-      column: column,
+      column: column+1,
       row: row + 1
     });
   }
+  
+  
   return neighborList;
 };
 

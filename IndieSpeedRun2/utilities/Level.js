@@ -29,11 +29,28 @@ utilities.Level = function(size, triangleHeight) {
 
       levelData.add(i, j, k, {toppingType: 'empty', sprite: newCircle, isOccupied: false});
 
+      //HANDLE mouse clicks
       goog.events.listen(newCircle,'click', function(e){
           if(!levelData.get(i,j,k).isOccupied){
-            //newCircle.setFill(30*i,90*j,60*k);
-            newCircle.setFill('#FF0000');
+            //place a PEPPERONI
+            newCircle.setFill('#FF0000'); //.setFill(30*i,90*j,60*k);
+            levelData.get(i,j,k).toppingType = 'pepperoni';
+            levelData.get(i,j,k).isOccupied = true;
             console.log(i, j, k);
+            
+            
+            //convert NEIGHBORS to pepperonis!
+            var neighborList = levelData.neighbors(i,j,k);
+            for(i=0; i<neighborList.length; i++){
+              console.log(neighborList);
+              var target= levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
+              
+              if(target.isOccupied && target.toppingType != 'pepperoni'){
+                target.toppingType = 'pepperoni';
+                target.sprite.setFill('#FF0000');
+              }
+            }
+            
           }
       })
     };
