@@ -43,9 +43,32 @@ utilities.Level = function(size, triangleHeight) {
       }
     }
   }
+  
+  randomizeLevel(size, triangleHeight, levelData, toppings);
 
   newLevel.appendChild(toppings);
   this.levelScene = newLevel;
+}
+
+function randomizeLevel(size, triangleHeight, levelData, toppings) {
+  var rand = 0;
+
+  for (var i = 7; i >= 0; i--) {
+    for (var j = size- 1; j >= 0; j--) {
+      for (var k = j * 2; k >= 0; k--) {
+        rand = Math.random();
+        if(rand > .75){
+          var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
+        
+          var toppingTemp = new lime.Circle().setSize(40,40).setFill('#FF00FF').setPosition(myCoordinates.x, myCoordinates.y);//new Topping(2),setPosition(;
+          levelData.add(i,j,k,toppingTemp);
+          
+          toppings.appendChild(toppingTemp);
+        }
+      }
+    }
+  }
+  
 }
 
 goog.exportSymbol('utilities.Level', utilities.Level);

@@ -1,23 +1,25 @@
 goog.provide('utilities.Topping');
 
-utilities.Topping = function()
-{
-    var image = new lime.Sprite();
-    
-    //resistance = how much enemy dominance this topping can withstand
-    var resistance = 1;
-    var dominance = 0; 
-    
-    //whether or not this topping is being dominated by a pepperoni
-    
-    var TYPE = {
+var TYPE = {
         pepperoni: 1,
         mushroom: 2,
         olives: 3,
         bacon: 4,
         buffaloChicken: 5,
         anchovies: 6
-    };
+};
+
+utilities.Topping = function(type)
+{
+//    var image = new lime.Sprite();
+    var image = new lime.Circle().setSize(40,40).setFill('#FFFFFF').
+    
+    //resistance = how much enemy dominance this topping can withstand
+    var resistance = 1;
+    var dominance = 0; 
+    
+    //whether or not this topping is being dominated by a pepperoni
+    TYPE = type;
     
     /* 
         influential: 1,

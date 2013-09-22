@@ -74,6 +74,7 @@ IndieSpeedRun2.start = function() {
 
   var myNewLevel = new utilities.Level(4, 164);
   director.replaceScene(myNewLevel.levelScene);
+//  myNewLevel.randomizeLevel();
 }
 
 
