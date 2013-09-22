@@ -23,7 +23,7 @@ utilities.Level = function(size, triangleHeight) {
       for (var k = j * 2; k >= 0; k--) {
         levelData.add(i, j, k, {junk: "data"});
         var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
-        var newCircle = new lime.Circle().setSize(25,25).setFill(i * 30, j * 90, k * 60).setPosition(20 * myCoordinates.x, 20 * myCoordinates.y);
+        var newCircle = new lime.Circle().setSize(38,38).setFill(i * 30, j * 90, k * 60).setPosition(20 * myCoordinates.x, 20 * myCoordinates.y);
         toppings.appendChild(newCircle);
         console.log(i, j, k, myCoordinates);
       }

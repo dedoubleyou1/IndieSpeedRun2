@@ -6,10 +6,10 @@ goog.require('goog.math.Vec2');
 utilities.ConvertCoordinates = function(wedge,row,column, triangleHeight)
 {
     //use WEDGE to get the starting angle
-    var startAngle = wedge * (Math.PI/4);// + 27.5*Math.PI/180;
+    var startAngle = wedge * (Math.PI/4);//1*Math.PI/180;// + 27.5*Math.PI/180;
     
     //use ROW to figure out the "radius" of that row
-    var rowRadius = triangleHeight/2 + row*(triangleHeight/2);
+    var rowRadius = triangleHeight/4 + row*(triangleHeight/2);
     
     //get the two SIDE vectors of this particular wedge @ rowRadius
     var sideVector1 = new goog.math.Vec2(rowRadius,0).rotate(startAngle);
@@ -29,14 +29,18 @@ utilities.ConvertCoordinates = function(wedge,row,column, triangleHeight)
     
     var triangleCenter = goog.math.Vec2.sum(sideVector1,centerEdge);
     
-    var offset = triangleHeight/12;
+    var offset = triangleHeight/11;
     
     //find OFFSET vector based on odd or even?
     if(column%2 == 0){
-        triangleCenter.add(triangleCenter.clone().normalize().scale(offset));
+        //triangleCenter.add(triangleCenter.clone().normalize().scale(offset));
+          triangleCenter.add(centerEdge.clone().rotate(Math.PI/2).normalize().scale(-offset) );
     }else{
-        triangleCenter.add(triangleCenter.clone().normalize().scale(-offset));
+        //triangleCenter.add(triangleCenter.clone().normalize().scale(-offset));
+          triangleCenter.add(centerEdge.clone().rotate(Math.PI/2).normalize().scale(offset) );
     }
+    
+    
     
     return triangleCenter;
 };
