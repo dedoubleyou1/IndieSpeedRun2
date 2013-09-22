@@ -1,6 +1,7 @@
 goog.provide('utilities.Topping');
 
 var TYPE = {
+        empty: 0,
         pepperoni: 1,
         mushroom: 2,
         olives: 3,

@@ -27,11 +27,12 @@ utilities.Level = function(size, triangleHeight) {
       var newCircle = new lime.Circle().setSize(40,40).setFill(0,0,0,0).setPosition(myCoordinates.x, myCoordinates.y);
       toppings.appendChild(newCircle);
 
-      levelData.add(i, j, k, {sprite: newCircle, isOccupied: false});
+      levelData.add(i, j, k, {toppingType: 'empty', sprite: newCircle, isOccupied: false});
 
       goog.events.listen(newCircle,'click', function(e){
           if(!levelData.get(i,j,k).isOccupied){
-            newCircle.setFill(30*i,90*j,60*k)
+            //newCircle.setFill(30*i,90*j,60*k);
+            newCircle.setFill('#FF0000');
             console.log(i, j, k);
           }
       })
@@ -63,11 +64,10 @@ function randomizeLevel(size, triangleHeight, levelData, toppings) {
         rand = Math.random();
         if(rand > .75){
           var myCoordinates = utilities.ConvertCoordinates(i, j, k, triangleHeight);
-        
-          //var toppingTemp = new lime.Circle().setSize(40,40).setFill('#FF00FF').setPosition(myCoordinates.x, myCoordinates.y);//new Topping(2),setPosition(;
-//          levelData.add(i,j,k,toppingTemp);
+          
           levelData.get(i,j,k).sprite.setFill('#BBBBBB');
           levelData.get(i,j,k).isOccupied = true;
+          levelData.get(i,j,k).type = 'mushroom';
           
           //          toppings.appendChild(toppingTemp);
         }
