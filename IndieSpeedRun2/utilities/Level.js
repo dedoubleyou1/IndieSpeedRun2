@@ -13,7 +13,10 @@ goog.require('utilities.NewStruct');
 goog.require('utilities.Timer');
 goog.require('utilities.Topping');
 
-utilities.Level = function(director, size, triangleHeight, toppingChances) {
+utilities.Level = function(director, size, triangleHeight, toppingChances,newLevelFunc) {
+
+  this.finished = false;
+  
 
   var newLevel = new lime.Scene();
 
@@ -64,11 +67,11 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
   var scoreLabel = new lime.Label().setText("Your Shares: 0% \nPrivately Owned: 0% \nPublicly Owned: 0%").setFontFamily('Verdana').setFontColor('#0c0').setFontSize(20).setFontWeight('bold').setSize(250,30).setPosition(125,50);
   hudLayer.appendChild(scoreLabel);
   
-  var comboLabel = new lime.Label().setText("TESTING WHOO").setFontFamily('Verdana').setFontColor('#00F').setFontSize(30).setFontWeight('bold').setSize(400,50).setPosition(700,50);
+  var comboLabel = new lime.Label().setText("").setFontFamily('Verdana').setFontColor('#00F').setFontSize(30).setFontWeight('bold').setSize(400,50).setPosition(700,50);
   hudLayer.appendChild(comboLabel);
   
   
-  var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel), function(){} );
+  var levelTimer = new utilities.Timer(this.sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel,newLevelFunc), function(){} );
 
   function initToppingsFunc(wedge, row, column) {
     return function() {
@@ -117,7 +120,7 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
             }
             powerUps = resultsObject;
             
-            comboCounter(powerUps,levelData);)
+            comboCounter(powerUps,levelData);
           }
       });
     };
@@ -139,6 +142,19 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
 
   levelTimer.start();
 };
+
+
+
+utilities.Level.prototype.isFinished = function()
+{
+  return this.finished;
+};
+
+utilities.Level.prototype.setFinished = function(fin)
+{
+  this.finished = fin;
+};
+
 
 
 // Local Functions
@@ -169,14 +185,9 @@ function comboCounter(powerUps, levelData)
   return comboList;
 }
 
-function isLevelFinished()
-{
-  
-
-  return false;
-}
-
-function sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel) {
+//function sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel,newLevelFunc) {
+utilities.Level.prototype.sliceTimerTick = function(levelData, levelSlices, scoreData, scoreLabel,newLevelFunc) {
+  var that = this;
   return function() {
     var removedSlice = levelData.removeSlice();
     levelSlices[removedSlice].setFill(0, 0, 0, 0);
@@ -185,12 +196,13 @@ function sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel) {
       inWedge[i].sprite.setFill(0, 0, 0, 0);
     };
     
-    tallyScores(inWedge, scoreData, scoreLabel);
+    that.tallyScores(inWedge, scoreData, scoreLabel,newLevelFunc);
   };
 }
 
 //called when a wedge is REMOVED
-function tallyScores(inWedge, scoreData, scoreLabel)
+//function tallyScores(inWedge, scoreData, scoreLabel,newLevelFunc)
+utilities.Level.prototype.tallyScores = function(inWedge, scoreData, scoreLabel,newLevelFunc)
 {
   for (var i = inWedge.length - 1; i >= 0; i--) {
     if(inWedge[i].toppingType === 'pepperoni' || inWedge[i].toppingType === 'doublePepperoni' || inWedge[i].toppingType === 'triplePepperoni')
@@ -207,6 +219,11 @@ function tallyScores(inWedge, scoreData, scoreLabel)
   
   //console.log("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
   scoreLabel.setText("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
+  
+  if(heroPercentage > 10){
+    this.finished = true;
+    //console.log(finished);
+  }
 }
 
 

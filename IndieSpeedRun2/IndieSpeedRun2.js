@@ -12,6 +12,7 @@ goog.require('lime.animation.Spawn');
 goog.require('lime.animation.FadeTo');
 goog.require('lime.animation.ScaleTo');
 goog.require('lime.animation.MoveTo');
+goog.require('lime.scheduleManager');
 goog.require('utilities.Level');
 
 
@@ -28,8 +29,21 @@ IndieSpeedRun2.start = function() {
   levels.push({ mushroom: .3, olive: .2, anchovy: 0});
   levels.push({ mushroom: .2, olive: .2, anchovy: .15 });
   levels.push({ mushroom: 0, olive: 0, anchovy: .5 });
+  
+  
+  
+  //UPDATE
+  lime.scheduleManager.schedule(function(dt){
+    console.log(myNewLevel.isFinished());
+    if(myNewLevel.isFinished()){
+      myNewLevel.setFinished(false);
+      nextLevel(1,currentLevel, director, levels);
+    }
+  });
+  
+  
 
-  var myNewLevel = new utilities.Level(director, 4, 164,levels[0]);//toppingChances);
+  var myNewLevel = new utilities.Level(director, 4, 164,levels[0]);
   director.replaceScene(myNewLevel.levelScene);
   
   //listen for KEYBOARD events
@@ -53,6 +67,26 @@ IndieSpeedRun2.start = function() {
         director.replaceScene(myNewLevel.levelScene);
     }
   });
+}
+
+//LOCAL function
+function nextLevel(changeType, currentLevel, director, levels){
+      console.log("Are we GETTING here??");
+      currentLevel++;
+      myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel],nextLevel);
+      director.replaceScene(myNewLevel.levelScene);
+
+    /*if(changeType === 1){
+      if(currentLevel+1 < levels.length){
+        currentLevel++;
+        myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel],nextLevel);
+        director.replaceScene(myNewLevel.levelScene);
+      }
+    }
+    else if(changeType === 0){
+      myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel],nextLevel);
+      director.replaceScene(myNewLevel.levelScene);
+    }*/
 }
 
 
