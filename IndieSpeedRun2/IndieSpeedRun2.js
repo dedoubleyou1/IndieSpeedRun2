@@ -22,7 +22,7 @@ IndieSpeedRun2.start = function() {
   var director = new lime.Director(document.body,1024,768);
 
   var toppingChances = {
-    mushroom: .3,
+    mushroom: .26,
     olive: .15,
     anchovy: .05
   }
