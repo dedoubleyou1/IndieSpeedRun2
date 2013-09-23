@@ -21,6 +21,8 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
   newLevel.appendChild(backgroundLayer);
   var toppingsLayer = new lime.Layer().setPosition(512, 384);
   newLevel.appendChild(toppingsLayer);
+  var hudLayer = new lime.Layer().setPosition(0,0);
+  newLevel.appendChild(hudLayer);
   var cursorLayer = new lime.Layer();
   newLevel.appendChild(cursorLayer);
 
@@ -58,7 +60,10 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
       undecided: 0
   };
   
-  var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices, scoreData), function(){} );
+  var scoreLabel = new lime.Label().setText("Your Shares: 0% \nPrivately Owned: 0% \nPublicly Owned: 0%").setFontFamily('Verdana').setFontColor('#0c0').setFontSize(20).setFontWeight('bold').setSize(250,30).setPosition(125,50);
+  hudLayer.appendChild(scoreLabel);
+  
+  var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel), function(){} );
 
   function initToppingsFunc(wedge, row, column) {
     return function() {
@@ -166,7 +171,7 @@ function isLevelFinished()
   return false;
 }
 
-function sliceTimerTick(levelData, levelSlices, scoreData) {
+function sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel) {
   return function() {
     var removedSlice = levelData.removeSlice();
     levelSlices[removedSlice].setFill(0, 0, 0, 0);
@@ -175,15 +180,13 @@ function sliceTimerTick(levelData, levelSlices, scoreData) {
       inWedge[i].sprite.setFill(0, 0, 0, 0);
     };
     
-    tallyScores(inWedge, scoreData);
+    tallyScores(inWedge, scoreData, scoreLabel);
   };
 }
 
 //called when a wedge is REMOVED
-function tallyScores(inWedge, scoreData)
+function tallyScores(inWedge, scoreData, scoreLabel)
 {
-  
-  
   for (var i = inWedge.length - 1; i >= 0; i--) {
     if(inWedge[i].toppingType === 'pepperoni' || inWedge[i].toppingType === 'doublePepperoni' || inWedge[i].toppingType === 'triplePepperoni')
       scoreData.heroTotal++;
@@ -197,9 +200,8 @@ function tallyScores(inWedge, scoreData)
   var enemyPercentage = Math.round(100*scoreData.enemyTotal/128);
   var unclaimedPercentage = Math.round(100*scoreData.undecided/128);
   
-  console.log("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
-  
-  return scoreData;
+  //console.log("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
+  scoreLabel.setText("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
 }
 
 
