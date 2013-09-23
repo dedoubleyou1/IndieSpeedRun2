@@ -1,6 +1,7 @@
 goog.provide('utilities.Level');
 
 //get requirements
+
 goog.require('lime.Circle');
 goog.require('lime.Layer');
 goog.require('lime.Scene');
@@ -81,7 +82,8 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
             },this, 1000);
 
             //place a PEPPERONI
-            newCircle.setFill(utilities.Topping('pepperoni').image); //.setFill(30*i,90*row,60*k);
+            thisTopping.sprite.setFill(utilities.Topping('pepperoni').image); //.setFill(30*i,90*row,60*k);
+
             thisTopping.toppingType = 'pepperoni';
             thisTopping.isOccupied = true;
             var neighborList = levelData.neighbors(wedge, row, column);

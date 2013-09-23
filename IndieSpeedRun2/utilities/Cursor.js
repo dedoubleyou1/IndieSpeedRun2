@@ -10,7 +10,7 @@ cursorSettings = {
   pepperoni: {
     image: 'assets/toppings_pepperoni.png',
     animation: function(cursor) {
-      var hide = new lime.animation.Spawn(
+      var pop = new lime.animation.Spawn(
         new lime.animation.Sequence(
           new lime.animation.ScaleTo(0).setDuration(0),
           new lime.animation.ScaleTo(1).setDuration(1)
@@ -22,7 +22,7 @@ cursorSettings = {
       )
       // var fadeAnimate = new lime.animation.FadeTo(1).setDuration(1);
       // var scaleAnimate = new lime.animation.FadeTo(1).setDuration(1);
-      cursor.runAction(hide);
+      cursor.runAction(pop);
     }
   }
 };

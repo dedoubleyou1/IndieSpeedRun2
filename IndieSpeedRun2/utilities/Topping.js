@@ -1,5 +1,21 @@
 goog.provide('utilities.Topping');
 
+goog.require('lime.animation.FadeTo');
+goog.require('lime.animation.ScaleTo');
+goog.require('lime.animation.Sequence');
+goog.require('lime.animation.Spawn');
+
+var pop = new lime.animation.Spawn(
+    new lime.animation.Sequence(
+      new lime.animation.ScaleTo(0).setDuration(0),
+      new lime.animation.ScaleTo(1).setDuration(.1)
+    ),
+    new lime.animation.Sequence(
+      new lime.animation.FadeTo(0).setDuration(0),
+      new lime.animation.FadeTo(1).setDuration(.1)
+    )
+);
+
 var toppingData = {
   //PEPPERONI//
   pepperoni: {
@@ -17,10 +33,16 @@ var toppingData = {
     image: 'assets/toppings_mushroom.png',
     chaining: function(levelData, wedge, row, column, resultsObject){
         //turn into a pepperoni and ATTACK!!
-        levelData.get(wedge, row, column).toppingType = 'pepperoni';
-        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);
+        var thisObject = levelData.get(wedge, row, column);
+        thisObject.toppingType = 'pepperoni';
+        thisObject.sprite.setFill(toppingData.pepperoni.image);
+        thisObject.sprite.runAction(pop);
+
         resultsObject.mushroom++;
-        attackNeighbors(levelData, wedge, row, column, resultsObject);
+        goog.events.listen(pop, lime.animation.Event.STOP, function(){
+          pop.removeTarget(thisObject.sprite);
+          attackNeighbors(levelData, wedge, row, column, resultsObject);
+        });
     },
     
     //STACKING power-up
