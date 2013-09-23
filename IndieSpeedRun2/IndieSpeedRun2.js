@@ -20,12 +20,8 @@ goog.require('utilities.Level');
 IndieSpeedRun2.start = function() {
 
   var director = new lime.Director(document.body,1024,768);
-
-  var toppingChances = {
-    mushroom: .26,
-    olive: .15,
-    anchovy: .05
-  }
+  
+  var currentLevel = 0;
   
   var levels = [];
   levels.push({ mushroom: .26, olive: .15, anchovy: .05 });
@@ -34,7 +30,25 @@ IndieSpeedRun2.start = function() {
 
   var myNewLevel = new utilities.Level(4, 164,levels[0]);//toppingChances);
   director.replaceScene(myNewLevel.levelScene);
-//  myNewLevel.randomizeLevel();
+  
+  //listen for KEYBOARD events
+  goog.events.listen(director, goog.events.EventType.KEYUP, function (e) {
+    if (e.event.keyCode === 78) { //letter 'n'
+      if(currentLevel+1 < levels.length){
+        currentLevel++;
+        newLevel = new utilities.Level(4,164,levels[currentLevel]);
+      }
+    }
+    else if(e.event.keyCode === 80){ //p - previous level
+      
+    }
+    else if(e.event.keyCode === 82){ //r - restart
+      //myNewLevel = new utilities.Level(4, 164,levels[1])
+    }
+  });
+  
+
+  
 }
 
 
