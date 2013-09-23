@@ -195,7 +195,7 @@ function tallyScores(inWedge, scoreData)
   var enemyPercentage = Math.round(100*scoreData.enemyTotal/128);
   var unclaimedPercentage = Math.round(100*scoreData.undecided/128);
   
-  console.log("Your Shares: " + heroPercentage + "%, Enemy Shares: " + enemyPercentage + "%, unclaimed: " + unclaimedPercentage + "%");
+  console.log("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
   
   return scoreData;
 }
