@@ -60,8 +60,13 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
       undecided: 0
   };
   
+  //create Labels
   var scoreLabel = new lime.Label().setText("Your Shares: 0% \nPrivately Owned: 0% \nPublicly Owned: 0%").setFontFamily('Verdana').setFontColor('#0c0').setFontSize(20).setFontWeight('bold').setSize(250,30).setPosition(125,50);
   hudLayer.appendChild(scoreLabel);
+  
+  var comboLabel = new lime.Label().setText("TESTING WHOO").setFontFamily('Verdana').setFontColor('#00F').setFontSize(30).setFontWeight('bold').setSize(400,50).setPosition(700,50);
+  hudLayer.appendChild(comboLabel);
+  
   
   var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel), function(){} );
 
@@ -112,7 +117,7 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
             }
             powerUps = resultsObject;
             
-            comboCounter(powerUps,levelData)
+            comboCounter(powerUps,levelData);)
           }
       });
     };
