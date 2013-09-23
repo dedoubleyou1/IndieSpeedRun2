@@ -38,7 +38,6 @@ utilities.Level = function(size, triangleHeight) {
           if (!thisTopping.isOccupied) {
             //place a PEPPERONI
             newCircle.setFill(utilities.Topping('pepperoni').image); //.setFill(30*i,90*row,60*k);
-            var thisTopping = levelData.get(wedge, row, column);
             thisTopping.toppingType = 'pepperoni';
             thisTopping.isOccupied = true;
             var neighborList = levelData.neighbors(wedge, row, column);
@@ -48,7 +47,7 @@ utilities.Level = function(size, triangleHeight) {
               var powerUpProperties = Object.getOwnPropertyNames(powerUps);
               for (var i = powerUpProperties.length - 1; i >= 0; i--) {
                 if (powerUps[powerUpProperties[i]] > 0) {
-                  utilities.Topping(powerUpProperties[i]).powerUp(levelData, wedge, row, column)
+                  utilities.Topping(powerUpProperties[i]).powerUp(levelData, wedge, row, column, powerUps[powerUpProperties[i]]);
                 }
               }
             }
