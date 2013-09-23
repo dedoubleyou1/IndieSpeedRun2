@@ -12,14 +12,33 @@ goog.require('utilities.Topping');
 
 utilities.Level = function(size, triangleHeight, toppingChances) {
   var newLevel = new lime.Scene();
-  var levelBackground = new lime.Sprite()
-    .setFill('assets/pizza_large.png')
-    .setPosition(512, 384);
-  newLevel.appendChild(levelBackground);
+  var levelSlices = [];
+  levelSlices[0] = new lime.Sprite()
+    .setFill('assets/pizza_sliced_0.png');
+  levelSlices[1] = new lime.Sprite()
+    .setFill('assets/pizza_sliced_1.png');
+  levelSlices[2] = new lime.Sprite()
+    .setFill('assets/pizza_sliced_2.png');
+  levelSlices[3] = new lime.Sprite()
+    .setFill('assets/pizza_sliced_3.png');
+  levelSlices[4] = new lime.Sprite()
+    .setFill('assets/pizza_sliced_4.png');
+  levelSlices[5] = new lime.Sprite()
+    .setFill('assets/pizza_sliced_5.png');
+  levelSlices[6] = new lime.Sprite()
+    .setFill('assets/pizza_sliced_6.png');
+  levelSlices[7] = new lime.Sprite()
+    .setFill('assets/pizza_sliced_7.png');
+
+  for (var i = levelSlices.length - 1; i >= 0; i--) {
+    levelSlices[i].setPosition(512, 384).setSize(768, 768);
+    newLevel.appendChild(levelSlices[i]);
+  }
+
   var toppings = new lime.Layer().setPosition(512, 384);
   var levelData = new utilities.NewStruct(size);
   var powerUps = false;
-  var levelTimer = new utilities.Timer(sliceTimerTick(levelData), sliceTimerTick(levelData));
+  var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices), sliceTimerTick(levelData, levelSlices));
 
 
   function initToppingsFunc(wedge, row, column) {
@@ -88,9 +107,12 @@ utilities.Level = function(size, triangleHeight, toppingChances) {
 
 // Local Functions
 
-function sliceTimerTick(levelData) {
+function sliceTimerTick(levelData, levelSlices) {
   return function() {
-    levelData.removeSlice();
+    var removedSlice = levelData.removeSlice();
+    console.log(removedSlice);
+    levelSlices[removedSlice].setFill(0, 0, 0, 0);
+    levelData.getInWedge(removedSlice);
   };
 }
 

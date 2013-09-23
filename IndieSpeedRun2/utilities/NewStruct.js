@@ -31,14 +31,24 @@ utilities.NewStruct.prototype.get = function(wedge, row, column) {
   return this.struct[wedge][row][column];
 };
 
+utilities.NewStruct.prototype.getInWedge = function(wedge) {
+  var wedgeMembers = [];
+    for (var row = this.size - 1; row >= 0; row--) {
+      for (var column = row * 2 - 1; column >= 0; column--) {
+        wedgeMembers.push(this.struct[wedge][row][column]);
+      }
+    }
+  return wedgeMembers;
+};
+
 utilities.NewStruct.prototype.removeSlice = function() {
+  var removedWedge;
   if (this.removedWedges.length === 0) {
-    var removedWedge = Math.floor((Math.random()*8));
+    removedWedge = Math.floor((Math.random() * 8));
     this.wedgeAvailable[removedWedge] = false;
     this.removedWedges.push(removedWedge);
-    console.log(removedWedge, this.removedWedges);
   } else if (this.removedWedges.length === 1) {
-    var removedWedge = Math.floor((Math.random()*2));
+    var removedWedge = Math.floor((Math.random() * 2));
     var nextRemovedWedge = this.removedWedges[0];
     if (removedWedge === 0) {
 
@@ -54,27 +64,35 @@ utilities.NewStruct.prototype.removeSlice = function() {
     }
     this.wedgeAvailable[nextRemovedWedge] = false;
     this.removedWedges.push(nextRemovedWedge);
-    this.removedWedges.sort();
-    console.log(nextRemovedWedge, this.removedWedges);
+    this.removedWedges.sort(function(a,b) {
+      return a - b;
+    });
+    if (this.removedWedges[0] === 0 && this.removedWedges[1] === 7){
+      this.removedWedges[0] = 7;
+      this.removedWedges[1] = 0;
+    }
+    console.log(this.removedWedges);
+    removedWedge = nextRemovedWedge;
   } else {
-    var removedWedge = Math.floor((Math.random()*2));
+    var removedWedge = Math.floor((Math.random() * 2));
+    console.log(removedWedge)
     if (removedWedge === 0) {
       this.removedWedges[0] -= 1;
       if (this.removedWedges[0] < 0) {
         this.removedWedges[0] = 7;
       }
       this.wedgeAvailable[this.removedWedges[0]] = false;
-      console.log(this.removedWedges[0], this.removedWedges)
+      removedWedge = this.removedWedges[0];
     } else {
       this.removedWedges[1] += 1;
       if (this.removedWedges[1] > 7) {
         this.removedWedges[1] = 0;
       }
       this.wedgeAvailable[this.removedWedges[1]] = false;
-      console.log(this.removedWedges[1], this.removedWedges)
+      removedWedge = this.removedWedges[1];
     }
   }
-  return true;
+  return removedWedge;
 };
 
 utilities.NewStruct.prototype.neighbors = function(wedge, row, column) {

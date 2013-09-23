@@ -1,7 +1,7 @@
 goog.provide('utilities.Timer');
 
 var timerSettings = {
-  tick: 10000,
+  tick: 1000,
   totalTicks: 8,
   currentRunTime: 0,
   currentTicks: 0
