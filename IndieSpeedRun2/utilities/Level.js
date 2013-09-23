@@ -49,8 +49,21 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
   var levelData = new utilities.NewStruct(size);
   var powerUps = false;
   var mouseActive = true;
+<<<<<<< HEAD
   var cursor = new utilities.Cursor(director, cursorLayer, 'pepperoni');
   var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices), function(){} );
+=======
+  var cursor = new utilities.Cursor(director, 'pepperoni');
+
+  
+  var scoreData = {
+      heroTotal: 0,
+      enemyTotal: 0,
+      undecided: 0
+  };
+  
+  var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices, scoreData), function(){} );
+>>>>>>> c9384ac050736635d444d2c34f766c811ec13106
 
   function initToppingsFunc(wedge, row, column) {
     return function() {
@@ -150,7 +163,14 @@ function comboCounter(powerUps, levelData)
   return comboList;
 }
 
-function sliceTimerTick(levelData, levelSlices) {
+function isLevelFinished()
+{
+  
+
+  return false;
+}
+
+function sliceTimerTick(levelData, levelSlices, scoreData) {
   return function() {
     var removedSlice = levelData.removeSlice();
     levelSlices[removedSlice].setFill(0, 0, 0, 0);
@@ -158,7 +178,32 @@ function sliceTimerTick(levelData, levelSlices) {
     for (var i = inWedge.length - 1; i >= 0; i--) {
       inWedge[i].sprite.setFill(0, 0, 0, 0);
     };
+    
+    tallyScores(inWedge, scoreData);
   };
+}
+
+//called when a wedge is REMOVED
+function tallyScores(inWedge, scoreData)
+{
+  
+  
+  for (var i = inWedge.length - 1; i >= 0; i--) {
+    if(inWedge[i].toppingType === 'pepperoni' || inWedge[i].toppingType === 'doublePepperoni' || inWedge[i].toppingType === 'triplePepperoni')
+      scoreData.heroTotal++;
+    else if(inWedge[i].toppingType === 'empty')
+      scoreData.undecided++;
+    else
+      scoreData.enemyTotal++;
+  };
+  
+  var heroPercentage = Math.round(100*scoreData.heroTotal/128);
+  var enemyPercentage = Math.round(100*scoreData.enemyTotal/128);
+  var unclaimedPercentage = Math.round(100*scoreData.undecided/128);
+  
+  console.log("Your Shares: " + heroPercentage + "%, Enemy Shares: " + enemyPercentage + "%, unclaimed: " + unclaimedPercentage + "%");
+  
+  return scoreData;
 }
 
 
