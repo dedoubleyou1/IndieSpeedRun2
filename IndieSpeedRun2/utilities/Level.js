@@ -7,6 +7,7 @@ goog.require('lime.Scene');
 goog.require('lime.Sprite');
 goog.require('lime.scheduleManager');
 goog.require('utilities.ConvertCoordinates');
+goog.require('utilities.Cursor');
 goog.require('utilities.NewStruct');
 goog.require('utilities.Timer');
 goog.require('utilities.Topping');
