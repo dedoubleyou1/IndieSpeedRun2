@@ -30,6 +30,9 @@ utilities.Timer.prototype.start = function() {
     }
   };
   lime.scheduleManager.schedule(ticker);
+  return function() {
+     lime.scheduleManager.unschedule(ticker);
+  }
 };
 
 utilities.Timer.prototype.addTime = function(bonusTime) {

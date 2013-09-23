@@ -13,7 +13,7 @@ goog.require('utilities.NewStruct');
 goog.require('utilities.Timer');
 goog.require('utilities.Topping');
 
-utilities.Level = function(director, size, triangleHeight, toppingChances,newLevelFunc) {
+utilities.Level = function(director, size, triangleHeight, toppingChances) {
 
   this.finished = false;
   
@@ -71,7 +71,13 @@ utilities.Level = function(director, size, triangleHeight, toppingChances,newLev
   hudLayer.appendChild(comboLabel);
   
   
-  var levelTimer = new utilities.Timer(this.sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel,newLevelFunc), function(){} );
+  var finalStepFunction = function(){
+    this.finished = true;
+  }
+  
+  var levelTimer = new utilities.Timer(this.sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel), finalStepFunction);
+  this.endTimer = levelTimer.start();
+
 
   function initToppingsFunc(wedge, row, column) {
     return function() {
@@ -140,7 +146,6 @@ utilities.Level = function(director, size, triangleHeight, toppingChances,newLev
 
   this.levelScene = newLevel;
 
-  levelTimer.start();
 };
 
 
@@ -186,7 +191,7 @@ function comboCounter(powerUps, levelData)
 }
 
 //function sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel,newLevelFunc) {
-utilities.Level.prototype.sliceTimerTick = function(levelData, levelSlices, scoreData, scoreLabel,newLevelFunc) {
+utilities.Level.prototype.sliceTimerTick = function(levelData, levelSlices, scoreData, scoreLabel) {
   var that = this;
   return function() {
     var removedSlice = levelData.removeSlice();
@@ -196,13 +201,13 @@ utilities.Level.prototype.sliceTimerTick = function(levelData, levelSlices, scor
       inWedge[i].sprite.setFill(0, 0, 0, 0);
     };
     
-    that.tallyScores(inWedge, scoreData, scoreLabel,newLevelFunc);
+    that.tallyScores(inWedge, scoreData, scoreLabel);
   };
 }
 
 //called when a wedge is REMOVED
 //function tallyScores(inWedge, scoreData, scoreLabel,newLevelFunc)
-utilities.Level.prototype.tallyScores = function(inWedge, scoreData, scoreLabel,newLevelFunc)
+utilities.Level.prototype.tallyScores = function(inWedge, scoreData, scoreLabel)
 {
   for (var i = inWedge.length - 1; i >= 0; i--) {
     if(inWedge[i].toppingType === 'pepperoni' || inWedge[i].toppingType === 'doublePepperoni' || inWedge[i].toppingType === 'triplePepperoni')
@@ -221,8 +226,9 @@ utilities.Level.prototype.tallyScores = function(inWedge, scoreData, scoreLabel,
   scoreLabel.setText("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
   
   if(heroPercentage > 10){
+    this.endTimer();
     this.finished = true;
-    //console.log(finished);
+    console.log(this.finished);
   }
 }
 

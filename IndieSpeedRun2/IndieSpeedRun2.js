@@ -24,69 +24,29 @@ IndieSpeedRun2.start = function() {
   
   var currentLevel = 0;
   
-  var levels = [];
-  levels.push({ mushroom: .4, olive: 0, anchovy: 0 });//introduce mushrooms
-  levels.push({ mushroom: .3, olive: .2, anchovy: 0});
-  levels.push({ mushroom: .2, olive: .2, anchovy: .15 });
-  levels.push({ mushroom: 0, olive: 0, anchovy: .5 });
+  var levels = [
+    { mushroom: 0.4, olive: 0, anchovy: 0},
+    { mushroom: 0.0, olive: 0.4, anchovy: 0},
+    { mushroom: 0.3, olive: 0.2, anchovy: 0},
+    { mushroom: 0.2, olive: 0.4, anchovy: 0},
+    { mushroom: 0.5, olive: 0, anchovy: 0.25 },
+    { mushroom: 0.2, olive: 0.2, anchovy: 0.15}
+
+  ];
   
-  
+  var myLevel = new utilities.Level(director, 4, 164, levels[currentLevel]);
   
   //UPDATE
   lime.scheduleManager.schedule(function(dt){
-    console.log(myNewLevel.isFinished());
-    if(myNewLevel.isFinished()){
-      myNewLevel.setFinished(false);
-      nextLevel(1,currentLevel, director, levels);
+    if(myLevel.isFinished()){
+      myLevel.setFinished(false);
+      currentLevel += 1;
+      myLevel = new utilities.Level(director, 4, 164, levels[currentLevel]);
+      director.replaceScene(myLevel.levelScene);
     }
   });
-  
-  
-
-  var myNewLevel = new utilities.Level(director, 4, 164,levels[0]);
-  director.replaceScene(myNewLevel.levelScene);
-  
-  //listen for KEYBOARD events
-  goog.events.listen(director, goog.events.EventType.KEYUP, function (e) {
-    if (e.event.keyCode === 78) { //letter 'n'
-      if(currentLevel+1 < levels.length){
-        currentLevel++;
-        myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel]);
-        director.replaceScene(myNewLevel.levelScene);
-      }
-    }
-    else if(e.event.keyCode === 80){ //p - previous level
-      if(currentLevel-1 >= 0){
-        currentLevel--;
-        myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel]);
-        director.replaceScene(myNewLevel.levelScene);
-      }
-    }
-    else if(e.event.keyCode === 82){ //r - restart
-        myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel]);
-        director.replaceScene(myNewLevel.levelScene);
-    }
-  });
-}
-
-//LOCAL function
-function nextLevel(changeType, currentLevel, director, levels){
-      console.log("Are we GETTING here??");
-      currentLevel++;
-      myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel],nextLevel);
-      director.replaceScene(myNewLevel.levelScene);
-
-    /*if(changeType === 1){
-      if(currentLevel+1 < levels.length){
-        currentLevel++;
-        myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel],nextLevel);
-        director.replaceScene(myNewLevel.levelScene);
-      }
-    }
-    else if(changeType === 0){
-      myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel],nextLevel);
-      director.replaceScene(myNewLevel.levelScene);
-    }*/
+    
+  director.replaceScene(myLevel.levelScene);
 }
 
 
