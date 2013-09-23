@@ -36,14 +36,20 @@ IndieSpeedRun2.start = function() {
     if (e.event.keyCode === 78) { //letter 'n'
       if(currentLevel+1 < levels.length){
         currentLevel++;
-        newLevel = new utilities.Level(4,164,levels[currentLevel]);
+        myNewLevel = new utilities.Level(4,164,levels[currentLevel]);
+        director.replaceScene(myNewLevel.levelScene);
       }
     }
     else if(e.event.keyCode === 80){ //p - previous level
-      
+      if(currentLevel-1 >= 0){
+        currentLevel--;
+        myNewLevel = new utilities.Level(4,164,levels[currentLevel]);
+        director.replaceScene(myNewLevel.levelScene);
+      }
     }
     else if(e.event.keyCode === 82){ //r - restart
-      //myNewLevel = new utilities.Level(4, 164,levels[1])
+        myNewLevel = new utilities.Level(4,164,levels[currentLevel]);
+        director.replaceScene(myNewLevel.levelScene);
     }
   });
   
