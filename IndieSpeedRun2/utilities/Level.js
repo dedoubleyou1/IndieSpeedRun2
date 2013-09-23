@@ -41,7 +41,6 @@ utilities.Level = function(size, triangleHeight) {
             thisTopping.isOccupied = true;
             var neighborList = levelData.neighbors(wedge, row, column);
 
-            console.log(powerUps);
             if (!!powerUps) {
               var powerUpProperties = Object.getOwnPropertyNames(powerUps);
               for (var i = powerUpProperties.length - 1; i >= 0; i--) {
@@ -60,6 +59,7 @@ utilities.Level = function(size, triangleHeight) {
               }
             }
             powerUps = resultsObject;
+            console.log(powerUps);
           }
       });
     };
