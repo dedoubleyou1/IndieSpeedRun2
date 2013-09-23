@@ -92,7 +92,7 @@ var toppingData = {
   //ANCHOVY//
   anchovy: {
     image: 'assets/toppings_anchovy.png',
-    chaining: function(levelData, wedge, row, column, resultsObject){
+    chaining: function(levelData, wedge, row, column, resultsObject, levelTimer){
       var neighborTypes = checkNeighbors(levelData,wedge,row,column);
       var pprCount = 0;
       
