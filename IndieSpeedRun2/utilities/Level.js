@@ -12,7 +12,7 @@ goog.require('utilities.NewStruct');
 goog.require('utilities.Timer');
 goog.require('utilities.Topping');
 
-utilities.Level = function(size, triangleHeight, toppingChances) {
+utilities.Level = function(director, size, triangleHeight, toppingChances) {
   var newLevel = new lime.Scene();
   var levelSlices = [];
   levelSlices[0] = new lime.Sprite()
@@ -41,9 +41,8 @@ utilities.Level = function(size, triangleHeight, toppingChances) {
   var levelData = new utilities.NewStruct(size);
   var powerUps = false;
   var mouseActive = true;
-  //Level Timer
+  var cursor = new utilities.Cursor(director, 'pepperoni');
   var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices), function(){} );
-
 
   function initToppingsFunc(wedge, row, column) {
     return function() {

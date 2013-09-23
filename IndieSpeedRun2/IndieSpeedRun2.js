@@ -29,7 +29,7 @@ IndieSpeedRun2.start = function() {
   levels.push({ mushroom: .2, olive: .2, anchovy: .15 });
   levels.push({ mushroom: 0, olive: 0, anchovy: .5 });
 
-  var myNewLevel = new utilities.Level(4, 164,levels[0]);//toppingChances);
+  var myNewLevel = new utilities.Level(director, 4, 164,levels[0]);//toppingChances);
   director.replaceScene(myNewLevel.levelScene);
   
   //listen for KEYBOARD events
@@ -37,19 +37,19 @@ IndieSpeedRun2.start = function() {
     if (e.event.keyCode === 78) { //letter 'n'
       if(currentLevel+1 < levels.length){
         currentLevel++;
-        myNewLevel = new utilities.Level(4,164,levels[currentLevel]);
+        myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel]);
         director.replaceScene(myNewLevel.levelScene);
       }
     }
     else if(e.event.keyCode === 80){ //p - previous level
       if(currentLevel-1 >= 0){
         currentLevel--;
-        myNewLevel = new utilities.Level(4,164,levels[currentLevel]);
+        myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel]);
         director.replaceScene(myNewLevel.levelScene);
       }
     }
     else if(e.event.keyCode === 82){ //r - restart
-        myNewLevel = new utilities.Level(4,164,levels[currentLevel]);
+        myNewLevel = new utilities.Level(director, 4, 164, levels[currentLevel]);
         director.replaceScene(myNewLevel.levelScene);
     }
   });

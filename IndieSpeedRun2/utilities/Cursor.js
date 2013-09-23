@@ -3,7 +3,7 @@ goog.provide('utilities.Cursor');
 goog.require('lime.Sprite');
 
 utilities.Cursor = function(director, cursorType) {
-  goog.events.listen(director, goog.events.EventType.ONMOUSEMOVE, function (e) {
+  goog.events.listen(director, goog.events.EventType.MOUSEMOVE, function (e) {
     console.log('hi');
   })
 }
