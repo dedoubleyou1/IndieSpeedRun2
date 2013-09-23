@@ -116,7 +116,7 @@ function randomizeLevel(size, triangleHeight, levelData, toppings) {
           levelData.get(wedge, row, column).isOccupied = true;
           levelData.get(wedge, row, column).toppingType = 'olive';
         }
-        else if (rand >= 0.5 && rand < 0.55) {
+        else if (rand >= 0.5 && rand < 0.6) {
           var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
 
           levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('anchovy').image);

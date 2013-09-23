@@ -117,7 +117,9 @@ var toppingData = {
     //SLOW TIME
     powerUp: function(levelData, wedge, row, column, strength, levelTimer){
       if(strength >= 2){
-        
+        var bonus = (strength-1)*5000;
+        console.log(bonus);
+        levelTimer.addTime(bonus);
         return true;
       }  
       return false;
