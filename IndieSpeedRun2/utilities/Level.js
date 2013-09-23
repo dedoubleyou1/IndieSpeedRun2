@@ -34,7 +34,7 @@ utilities.Level = function(size, triangleHeight) {
 
           var thisTopping = levelData.get(wedge, row, column);
 
-          if (!thisTopping.isOccupied) {
+          if (!thisTopping.isOccupied && levelData.wedgeAvailable[wedge]) {
             //place a PEPPERONI
             newCircle.setFill(utilities.Topping('pepperoni').image); //.setFill(30*i,90*row,60*k);
             thisTopping.toppingType = 'pepperoni';

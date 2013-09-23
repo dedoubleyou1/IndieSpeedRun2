@@ -16,7 +16,7 @@ utilities.NewStruct = function(size) {
     this.struct.push(rows);
   }
   this.size = size;
-  this.removedEdgeSlices = [];
+  this.removedWedges = [];
   this.wedgeAvailable = [];
   for (var i = 7; i >= 0; i--) {
         this.wedgeAvailable.push(true);
@@ -32,24 +32,47 @@ utilities.NewStruct.prototype.get = function(wedge, row, column) {
 };
 
 utilities.NewStruct.prototype.removeSlice = function() {
-  if (this.removedSlices.length === 0) {
+  if (this.removedWedges.length === 0) {
     var removedWedge = Math.floor((Math.random()*8));
     this.wedgeAvailable[removedWedge] = false;
+    this.removedWedges.push(removedWedge);
+    console.log(removedWedge);
+  } else if (this.removedWedges.length === 1) {
+    var removedWedge = Math.floor((Math.random()*2));
+    var nextRemovedWedge = this.removedWedges[0];
+    if (removedWedge === 0) {
+
+      nextRemovedWedge -= 1;
+      if (nextRemovedWedge < 0) {
+        nextRemovedWedge = 7;
+      }
+    } else {
+      nextRemovedWedge += 1;
+      if (nextRemovedWedge > 7) {
+        nextRemovedWedge = 0;
+      }
+    }
+    this.wedgeAvailable[nextRemovedWedge] = false;
+    this.removedWedges.push(nextRemovedWedge);
+    console.log(nextRemovedWedge);
+
   } else {
     var removedWedge = Math.floor((Math.random()*2));
     if (removedWedge === 0) {
-      this.removedSlices[0] -= 1;
-      if (this.removedSlices[0] < 0) {
-        this.removedSlices[0] = 7;
+      this.removedWedges[0] -= 1;
+      if (this.removedWedges[0] < 0) {
+        this.removedWedges[0] = 7;
       }
-      this.wedgeAvailable[this.removedSlices[0]] = false;
+      console.log(this.removedWedges[0]);
+      this.wedgeAvailable[this.removedWedges[0]] = false;
     } else {
-      this.removedSlices[0] += 1;
-      if (this.removedSlices[0] > 7) {
-        this.removedSlices[0] = 0;
+      this.removedWedges[0] += 1;
+      if (this.removedWedges[0] > 7) {
+        this.removedWedges[0] = 0;
       }
-      this.wedgeAvailable[this.removedSlices[0]] = false;
+      this.wedgeAvailable[this.removedWedges[0]] = false;
     }
+    console.log(removedWedge)
   }
   return true;
 };
