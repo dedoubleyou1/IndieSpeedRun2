@@ -20,18 +20,18 @@ var toppingData = {
   //PEPPERONI//
   pepperoni: {
     image: 'assets/toppings_pepperoni.png',
-    chaining: function(levelData, wedge, row, column,resultsObject){
+    chaining: function(levelData, wedge, row, column, resultsObject) {
       //nothing happens here!
     },
-    powerUp: function(levelData, wedge, row, column, strength){
+    powerUp: function(levelData, wedge, row, column, strength) {
       //nuttin here either
     }
   },
-  
+
   //MUSHROOM//
   mushroom: {
     image: 'assets/toppings_mushroom.png',
-    chaining: function(levelData, wedge, row, column, resultsObject){
+    chaining: function(levelData, wedge, row, column, resultsObject) {
         //turn into a pepperoni and ATTACK!!
         var thisObject = levelData.get(wedge, row, column);
         thisObject.toppingType = 'pepperoni';
@@ -39,69 +39,75 @@ var toppingData = {
         thisObject.sprite.runAction(pop);
 
         resultsObject.mushroom++;
-        goog.events.listen(pop, lime.animation.Event.STOP, function(){
+        goog.events.listen(pop, lime.animation.Event.STOP, function() {
           pop.removeTarget(thisObject.sprite);
           attackNeighbors(levelData, wedge, row, column, resultsObject);
         });
     },
-    
+
     //STACKING power-up
-    powerUp: function(levelData, wedge, row, column, strength){
-      if(strength >= 4){
-        
-        if(strength <6) {
+    powerUp: function(levelData, wedge, row, column, strength) {
+      if (strength >= 4) {
+
+        if (strength < 6) {
           levelData.get(wedge, row, column).toppingType = 'doublePepperoni';
           levelData.get(wedge, row, column).sprite.setFill(toppingData.doublePepperoni.image);
         }
-        else if (strength >=6) {
+        else if (strength >= 6) {
           levelData.get(wedge, row, column).toppingType = 'triplePepperoni';
           levelData.get(wedge, row, column).sprite.setFill(toppingData.triplePepperoni.image);
         }
         console.log(levelData.get(wedge, row, column).toppingType);
         return true;
       }
-      
-      levelData.get(wedge,row,column).toppingType.stack = 1;
+
+      levelData.get(wedge, row, column).toppingType.stack = 1;
       return false;
     }
   },
-  
+
   //OLIVES//
   olive: {
     image: 'assets/toppings_olive.png',
-    chaining: function(levelData, wedge, row, column, resultsObject){
-      var neighborTypes = checkNeighbors(levelData,wedge,row,column);
+    chaining: function(levelData, wedge, row, column, resultsObject) {
+      var neighborTypes = checkNeighbors(levelData, wedge, row, column);
       var pprCount = 0;
-      
+
       for (var i = neighborTypes.length - 1; i >= 0; i--) {
-        if(neighborTypes[i] == 'pepperoni')
+        if (neighborTypes[i] == 'pepperoni')
           pprCount++;
-        else if(neighborTypes[i] == 'doublePepperoni' || neighborTypes[i] == 'triplePepperoni'){
-          pprCount +=2; //don't need 3 anywho
+        else if (neighborTypes[i] == 'doublePepperoni' || neighborTypes[i] == 'triplePepperoni') {
+          pprCount += 2; //don't need 3 anywho
         }
       }
 
-      if(pprCount >= 2){
+      if (pprCount >= 2) {
         //turn into a pepperoni and ATTACK!!
-        levelData.get(wedge, row, column).toppingType = 'pepperoni';
-        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);
+        var thisObject = levelData.get(wedge, row, column);
+        thisObject.toppingType = 'pepperoni';
+        thisObject.sprite.setFill(toppingData.pepperoni.image);
+        thisObject.sprite.runAction(pop);
+
         resultsObject.olive++;
-        return attackNeighbors(levelData, wedge, row, column, resultsObject);
+        goog.events.listen(pop, lime.animation.Event.STOP, function() {
+          pop.removeTarget(thisObject.sprite);
+          return attackNeighbors(levelData, wedge, row, column, resultsObject);
+        });
       }
     },
-    
+
     //AOE power-up
-    powerUp: function(levelData, wedge, row, column, strength){
-      if(strength >= 2){
-        var neighborList = levelData.neighbors(wedge,row,column);
+    powerUp: function(levelData, wedge, row, column, strength) {
+      if (strength >= 2) {
+        var neighborList = levelData.neighbors(wedge, row, column);
         console.log('AOE ENABLED');
-        
+
         for (var i = neighborList.length - 1; i >= 0; i--) {
           var neighborData = levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
-          
-          if(!neighborData.isOccupied){
+
+          if (!neighborData.isOccupied) {
             neighborData.toppingType = 'littlePepperoni';
-            neighborData.sprite.setFill(utilities.Topping('pepperoni').image)
+            neighborData.sprite.setFill(utilities.Topping('pepperoni').image);
             neighborData.isOccupied = true;
           }
         }
@@ -110,57 +116,64 @@ var toppingData = {
       return false;
     }
   },
-  
+
   //ANCHOVY//
   anchovy: {
     image: 'assets/toppings_anchovy.png',
-    chaining: function(levelData, wedge, row, column, resultsObject){
-      var neighborTypes = checkNeighbors(levelData,wedge,row,column);
+    chaining: function(levelData, wedge, row, column, resultsObject) {
+      var neighborTypes = checkNeighbors(levelData, wedge, row, column);
       var pprCount = 0;
-      
+
       for (var i = neighborTypes.length - 1; i >= 0; i--) {
-        if(neighborTypes[i] == 'pepperoni')
-          pprCount ++;
-        else if(neighborTypes[i] == 'doublePepperoni')
-          pprCount +=2; //don't need 3 anywho
-        else if(neighborTypes[i] == 'triplePepperoni')
-          pprCount +=3;
+        if (neighborTypes[i] == 'pepperoni') {
+          pprCount += 1;
+        } else if (neighborTypes[i] == 'doublePepperoni') {
+          pprCount += 2; //don't need 3 anywho
+        } else if (neighborTypes[i] == 'triplePepperoni') {
+          pprCount += 3;
+        }
       }
-      
-      if(pprCount >= 3){
+
+      if (pprCount >= 3) {
         //turn into a pepperoni and ATTACK!!
-        levelData.get(wedge, row, column).toppingType = 'pepperoni';
-        levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);
+        var thisObject = levelData.get(wedge, row, column);
+        thisObject.toppingType = 'pepperoni';
+        thisObject.sprite.setFill(toppingData.pepperoni.image);
+        thisObject.sprite.runAction(pop);
+
         resultsObject.anchovy++;
-        return attackNeighbors(levelData, wedge, row, column, resultsObject);
+        goog.events.listen(pop, lime.animation.Event.STOP, function() {
+          pop.removeTarget(thisObject.sprite);
+          return attackNeighbors(levelData, wedge, row, column, resultsObject);
+        });
       }
     },
-    
+
     //SLOW TIME
-    powerUp: function(levelData, wedge, row, column, strength, levelTimer){
-      if(strength >= 2){
-        var bonus = (strength-1)*5000;
+    powerUp: function(levelData, wedge, row, column, strength, levelTimer) {
+      if (strength >= 2) {
+        var bonus = (strength - 1) * 5000;
         console.log(bonus);
         levelTimer.addTime(bonus);
         return true;
-      }  
+      }
       return false;
     }
   },
-  
+
   // bacon: 4,
   // buffaloChicken: 5,
-  
+
   doublePepperoni: {
     image: 'assets/toppings_pepperoni_double.png',
-    chaining: function(levelData, wedge, row, column,resultsObject){
+    chaining: function(levelData, wedge, row, column, resultsObject) {
       //nothing happens here!
     },
-    powerUp: function(levelData, wedge, row, column, strength){
+    powerUp: function(levelData, wedge, row, column, strength) {
       //nuttin here either
     }
   },
-  
+
   triplePepperoni: {
     image: 'assets/toppings_pepperoni_triple.png',
     chaining: function(levelData, wedge, row, column,resultsObject){
