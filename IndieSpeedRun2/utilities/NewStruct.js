@@ -36,7 +36,7 @@ utilities.NewStruct.prototype.removeSlice = function() {
     var removedWedge = Math.floor((Math.random()*8));
     this.wedgeAvailable[removedWedge] = false;
     this.removedWedges.push(removedWedge);
-    console.log(removedWedge);
+    console.log(removedWedge, this.removedWedges);
   } else if (this.removedWedges.length === 1) {
     var removedWedge = Math.floor((Math.random()*2));
     var nextRemovedWedge = this.removedWedges[0];
@@ -54,8 +54,8 @@ utilities.NewStruct.prototype.removeSlice = function() {
     }
     this.wedgeAvailable[nextRemovedWedge] = false;
     this.removedWedges.push(nextRemovedWedge);
-    console.log(nextRemovedWedge);
-
+    this.removedWedges.sort();
+    console.log(nextRemovedWedge, this.removedWedges);
   } else {
     var removedWedge = Math.floor((Math.random()*2));
     if (removedWedge === 0) {
@@ -63,16 +63,16 @@ utilities.NewStruct.prototype.removeSlice = function() {
       if (this.removedWedges[0] < 0) {
         this.removedWedges[0] = 7;
       }
-      console.log(this.removedWedges[0]);
       this.wedgeAvailable[this.removedWedges[0]] = false;
+      console.log(this.removedWedges[0], this.removedWedges)
     } else {
-      this.removedWedges[0] += 1;
-      if (this.removedWedges[0] > 7) {
-        this.removedWedges[0] = 0;
+      this.removedWedges[1] += 1;
+      if (this.removedWedges[1] > 7) {
+        this.removedWedges[1] = 0;
       }
-      this.wedgeAvailable[this.removedWedges[0]] = false;
+      this.wedgeAvailable[this.removedWedges[1]] = false;
+      console.log(this.removedWedges[1], this.removedWedges)
     }
-    console.log(removedWedge)
   }
   return true;
 };
