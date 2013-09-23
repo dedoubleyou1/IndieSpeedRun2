@@ -46,11 +46,14 @@ var toppingData = {
     powerUp: function(levelData, wedge, row, column, strength){
       if(strength >= 4){
         
-        if(strength <6)
+        if(strength <6) {
           levelData.get(wedge, row, column).toppingType = 'doublePepperoni';
-        else if(strength >=6)
+          levelData.get(wedge, row, column).sprite.setFill(toppingData.doublePepperoni.image);
+        }
+        else if (strength >=6) {
           levelData.get(wedge, row, column).toppingType = 'triplePepperoni';
-        
+          levelData.get(wedge, row, column).sprite.setFill(toppingData.triplePepperoni.image);
+        }
         console.log(levelData.get(wedge, row, column).toppingType);
         return true;
       }
@@ -148,7 +151,7 @@ var toppingData = {
   // buffaloChicken: 5,
   
   doublePepperoni: {
-    image: 'assets/toppings_mushroom.png',
+    image: 'assets/toppings_pepperoni_double.png',
     chaining: function(levelData, wedge, row, column,resultsObject){
       //nothing happens here!
     },
@@ -158,7 +161,7 @@ var toppingData = {
   },
   
   triplePepperoni: {
-    image: 'assets/toppings_olive.png',
+    image: 'assets/toppings_pepperoni_triple.png',
     chaining: function(levelData, wedge, row, column,resultsObject){
       //nothing happens here!
     },
