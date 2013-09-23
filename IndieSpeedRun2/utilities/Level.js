@@ -13,7 +13,16 @@ goog.require('utilities.Timer');
 goog.require('utilities.Topping');
 
 utilities.Level = function(director, size, triangleHeight, toppingChances) {
+
   var newLevel = new lime.Scene();
+
+  var backgroundLayer = new lime.Layer();
+  newLevel.appendChild(backgroundLayer);
+  var toppingsLayer = new lime.Layer().setPosition(512, 384);
+  newLevel.appendChild(toppingsLayer);
+  var cursorLayer = new lime.Layer();
+  newLevel.appendChild(cursorLayer);
+
   var levelSlices = [];
   levelSlices[0] = new lime.Sprite()
     .setFill('assets/pizza_sliced_0.png');
@@ -34,14 +43,13 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
 
   for (var i = levelSlices.length - 1; i >= 0; i--) {
     levelSlices[i].setPosition(512, 384).setSize(768, 768);
-    newLevel.appendChild(levelSlices[i]);
+    backgroundLayer.appendChild(levelSlices[i]);
   }
 
-  var toppings = new lime.Layer().setPosition(512, 384);
   var levelData = new utilities.NewStruct(size);
   var powerUps = false;
   var mouseActive = true;
-  var cursor = new utilities.Cursor(director, 'pepperoni');
+  var cursor = new utilities.Cursor(director, cursorLayer, 'pepperoni');
   var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices), function(){} );
 
   function initToppingsFunc(wedge, row, column) {
@@ -49,7 +57,7 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
 
       var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
       var newCircle = new lime.Circle().setSize(40, 40).setFill(0, 0, 0, 0).setPosition(myCoordinates.x, myCoordinates.y);
-      toppings.appendChild(newCircle);
+      toppingsLayer.appendChild(newCircle);
 
       levelData.add(wedge, row, column, {toppingType: 'empty', sprite: newCircle, isOccupied: false});
 
@@ -57,8 +65,8 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
       goog.events.listen(newCircle, 'click', function(e) {
 
           var thisTopping = levelData.get(wedge, row, column);
-          console.log(mouseActive);
           if (!thisTopping.isOccupied && levelData.wedgeAvailable[wedge] && mouseActive === true) {
+            cursor.animate();
             //deactivate mouse
             mouseActive = false;
             lime.scheduleManager.callAfter(function() {
@@ -106,9 +114,8 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
     }
   }
 
-  randomizeLevel(size, triangleHeight, levelData, toppings, toppingChances);
+  randomizeLevel(size, triangleHeight, levelData, toppingsLayer, toppingChances);
 
-  newLevel.appendChild(toppings);
   this.levelScene = newLevel;
 
   levelTimer.start();
