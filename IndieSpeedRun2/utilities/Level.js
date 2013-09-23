@@ -49,12 +49,7 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
   var levelData = new utilities.NewStruct(size);
   var powerUps = false;
   var mouseActive = true;
-<<<<<<< HEAD
   var cursor = new utilities.Cursor(director, cursorLayer, 'pepperoni');
-  var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices), function(){} );
-=======
-  var cursor = new utilities.Cursor(director, 'pepperoni');
-
   
   var scoreData = {
       heroTotal: 0,
@@ -63,7 +58,6 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
   };
   
   var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices, scoreData), function(){} );
->>>>>>> c9384ac050736635d444d2c34f766c811ec13106
 
   function initToppingsFunc(wedge, row, column) {
     return function() {
