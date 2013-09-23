@@ -19,6 +19,8 @@ utilities.Level = function(size, triangleHeight) {
   var toppings = new lime.Layer().setPosition(512, 384);
   var levelData = new utilities.NewStruct(size);
   var powerUps = false;
+  var levelTimer = new utilities.Timer(sliceTimerTick(levelData), sliceTimerTick(levelData));
+
 
   function initToppingsFunc(wedge, row, column) {
     return function() {
@@ -45,7 +47,7 @@ utilities.Level = function(size, triangleHeight) {
               var powerUpProperties = Object.getOwnPropertyNames(powerUps);
               for (var i = powerUpProperties.length - 1; i >= 0; i--) {
                 if (powerUps[powerUpProperties[i]] > 0) {
-                  utilities.Topping(powerUpProperties[i]).powerUp(levelData, wedge, row, column, powerUps[powerUpProperties[i]]);
+                  utilities.Topping(powerUpProperties[i]).powerUp(levelData, wedge, row, column, powerUps[powerUpProperties[i]], levelTimer);
                 }
               }
             }
@@ -80,7 +82,6 @@ utilities.Level = function(size, triangleHeight) {
   newLevel.appendChild(toppings);
   this.levelScene = newLevel;
 
-  var levelTimer = new utilities.Timer(sliceTimerTick(levelData), sliceTimerTick(levelData));
   levelTimer.start();
 };
 
