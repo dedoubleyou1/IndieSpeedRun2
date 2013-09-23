@@ -53,9 +53,6 @@ IndieSpeedRun2.start = function() {
         director.replaceScene(myNewLevel.levelScene);
     }
   });
-  
-
-  
 }
 
 

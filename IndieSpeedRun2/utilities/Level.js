@@ -90,6 +90,8 @@ utilities.Level = function(size, triangleHeight, toppingChances) {
               }
             }
             powerUps = resultsObject;
+            
+            comboCounter(powerUps,levelData)
           }
       });
     };
@@ -115,6 +117,32 @@ utilities.Level = function(size, triangleHeight, toppingChances) {
 
 
 // Local Functions
+function comboCounter(powerUps, levelData)
+{
+  var comboList = [];
+
+  if(powerUps.mushroom >=4 && powerUps.mushroom<6){
+    comboList.push("Double Stack ACTIVATED");
+  }
+  else if(powerUps.mushroom >=6){
+    comboList.push("Triple Stack ACTIVATED");
+  }
+  
+  if(powerUps.olive >=2){
+    comboList.push("AOE ACTIVATED");
+  }
+  
+  if(powerUps.anchovy >= 2){
+    comboList.push("Time Slow ACTIVATED");
+  }
+  
+  for(i=comboList.length-1;i>=0;i--)
+  {
+    console.log(comboList[i]);
+  }
+  
+  return comboList;
+}
 
 function sliceTimerTick(levelData, levelSlices) {
   return function() {
@@ -126,7 +154,6 @@ function sliceTimerTick(levelData, levelSlices) {
     };
   };
 }
-
 
 
 function randomizeLevel(size, triangleHeight, levelData, toppings, toppingChances) {

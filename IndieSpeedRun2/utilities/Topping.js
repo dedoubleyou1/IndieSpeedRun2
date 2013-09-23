@@ -70,7 +70,7 @@ var toppingData = {
     
     //AOE power-up
     powerUp: function(levelData, wedge, row, column, strength){
-      if(strength >= 3){
+      if(strength >= 2){
         var neighborList = levelData.neighbors(wedge,row,column);
         console.log('AOE ENABLED');
         
