@@ -31,6 +31,26 @@ var toppingData = {
     }
   },
   
+  doublePepperoni: {
+    image: 'assets/toppings_mushroom.png',
+    chaining: function(levelData, wedge, row, column,resultsObject){
+      //nothing happens here!
+    },
+    powerUp: function(levelData, wedge, row, column, strength){
+      //nuttin here either
+    }
+  },
+  
+  triplePepperoni: {
+    image: 'assets/toppings_olive.png',
+    chaining: function(levelData, wedge, row, column,resultsObject){
+      //nothing happens here!
+    },
+    powerUp: function(levelData, wedge, row, column, strength){
+      //nuttin here either
+    }
+  },
+  
   //MUSHROOM//
   mushroom: {
     image: 'assets/toppings_mushroom.png',
@@ -41,14 +61,21 @@ var toppingData = {
         resultsObject.mushroom++;
         attackNeighbors(levelData, wedge, row, column, resultsObject);
     },
+    
     powerUp: function(levelData, wedge, row, column, strength){
       if(strength >= 4){
-        powerUpData.stacking.isOn = true;
-        powerUpData.stacking.number = 1 + strength%4;
+        //console.log('STACKING: ' + stack);
+        
+        if(strength <6)
+          levelData.get(wedge, row, column).toppingType = 'doublePepperoni';
+        else if(strength >=6)
+          levelData.get(wedge, row, column).toppingType = 'triplePepperoni';
+        
+        console.log(levelData.get(wedge, row, column).toppingType);
         return true;
       }
       
-      powerUpData.stacking.isOn = false;
+      levelData.get(wedge,row,column).toppingType.stack = 1;
       return false;
     }
   },
@@ -63,6 +90,9 @@ var toppingData = {
       for (var i = neighborTypes.length - 1; i >= 0; i--) {
         if(neighborTypes[i] == 'pepperoni')
           pprCount++;
+        else if(neighborTypes[i] == 'doublePepperoni' || neighborTypes[i] == 'triplePepperoni'){
+          pprCount +=2; //don't need 3 anywho
+        }
       }
 
       if(pprCount >= 2){
@@ -94,10 +124,14 @@ var toppingData = {
       
       for (var i = neighborTypes.length - 1; i >= 0; i--) {
         if(neighborTypes[i] == 'pepperoni')
-          pprCount++;
+          pprCount ++;
+        else if(neighborTypes[i] == 'doublePepperoni')
+          pprCount +=2; //don't need 3 anywho
+        else if(neighborTypes[i] == 'triplePepperoni')
+          pprCount +=3;
       }
       
-      if(pprCount == 3){
+      if(pprCount >= 3){
         //turn into a pepperoni and ATTACK!!
         levelData.get(wedge, row, column).toppingType = 'pepperoni';
         levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);
