@@ -31,26 +31,6 @@ var toppingData = {
     }
   },
   
-  doublePepperoni: {
-    image: 'assets/toppings_mushroom.png',
-    chaining: function(levelData, wedge, row, column,resultsObject){
-      //nothing happens here!
-    },
-    powerUp: function(levelData, wedge, row, column, strength){
-      //nuttin here either
-    }
-  },
-  
-  triplePepperoni: {
-    image: 'assets/toppings_olive.png',
-    chaining: function(levelData, wedge, row, column,resultsObject){
-      //nothing happens here!
-    },
-    powerUp: function(levelData, wedge, row, column, strength){
-      //nuttin here either
-    }
-  },
-  
   //MUSHROOM//
   mushroom: {
     image: 'assets/toppings_mushroom.png',
@@ -62,9 +42,9 @@ var toppingData = {
         attackNeighbors(levelData, wedge, row, column, resultsObject);
     },
     
+    //STACKING power-up
     powerUp: function(levelData, wedge, row, column, strength){
       if(strength >= 4){
-        //console.log('STACKING: ' + stack);
         
         if(strength <6)
           levelData.get(wedge, row, column).toppingType = 'doublePepperoni';
@@ -104,9 +84,23 @@ var toppingData = {
       }
     },
     
+    //AOE power-up
     powerUp: function(levelData, wedge, row, column, strength){
       if(strength >= 2){
-        powerUpData.areaOfEffect.isOn = true;
+        var neighborList = levelData.neighbors(wedge,row,column);
+        
+        for (var i = neighborList.length - 1; i >= 0; i--) {
+          var neighborData = levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
+          
+          if(!neighborData.isOccupied){
+            neighborData.toppingType = 'pepperoni';
+            neighborData.sprite.setFill(utilities.Topping('pepperoni').image)
+            neighborData.isOccupied = true;
+            console.log('AOE ENABLED');
+          }
+        }
+        
+        
         return true;
       }
       
@@ -148,10 +142,30 @@ var toppingData = {
       powerUpData.timerSlow.isOn = true;      
       return false;
     }
-  }
+  },
   
   // bacon: 4,
   // buffaloChicken: 5,
+  
+  doublePepperoni: {
+    image: 'assets/toppings_mushroom.png',
+    chaining: function(levelData, wedge, row, column,resultsObject){
+      //nothing happens here!
+    },
+    powerUp: function(levelData, wedge, row, column, strength){
+      //nuttin here either
+    }
+  },
+  
+  triplePepperoni: {
+    image: 'assets/toppings_olive.png',
+    chaining: function(levelData, wedge, row, column,resultsObject){
+      //nothing happens here!
+    },
+    powerUp: function(levelData, wedge, row, column, strength){
+      //nuttin here either
+    }
+  }
 
 };
 
