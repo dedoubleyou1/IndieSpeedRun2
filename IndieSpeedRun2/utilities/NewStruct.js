@@ -51,9 +51,7 @@ utilities.NewStruct.prototype.removeSlice = function() {
       this.wedgeAvailable[this.removedSlices[0]] = false;
     }
   }
-
-
-  return
+  return true;
 };
 
 utilities.NewStruct.prototype.neighbors = function(wedge, row, column) {
