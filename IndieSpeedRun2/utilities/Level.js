@@ -112,7 +112,10 @@ function sliceTimerTick(levelData, levelSlices) {
     var removedSlice = levelData.removeSlice();
     console.log(removedSlice);
     levelSlices[removedSlice].setFill(0, 0, 0, 0);
-    levelData.getInWedge(removedSlice);
+    var inWedge = levelData.getInWedge(removedSlice);
+    for (var i = inWedge.length - 1; i >= 0; i--) {
+      inWedge[i].sprite.setFill(0, 0, 0, 0);
+    };
   };
 }
 

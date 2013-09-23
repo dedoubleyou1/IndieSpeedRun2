@@ -34,7 +34,7 @@ utilities.NewStruct.prototype.get = function(wedge, row, column) {
 utilities.NewStruct.prototype.getInWedge = function(wedge) {
   var wedgeMembers = [];
     for (var row = this.size - 1; row >= 0; row--) {
-      for (var column = row * 2 - 1; column >= 0; column--) {
+      for (var column = row * 2; column >= 0; column--) {
         wedgeMembers.push(this.struct[wedge][row][column]);
       }
     }
