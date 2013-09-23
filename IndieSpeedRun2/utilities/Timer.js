@@ -1,11 +1,12 @@
 goog.provide('utilities.Timer');
 
+goog.require('lime.scheduleManager');
 
 //, timerDisplayLayer
 utilities.Timer = function(tickFunc, finalFunc) {
   this.tickFunc = tickFunc;
   this.finalFunc = finalFunc;
-  this.tick = 1000;
+  this.tick = 5000;
   this.totalTicks = 8;
   this.currentRunTime = 0;
   this.currentTicks = 0;
@@ -16,10 +17,10 @@ utilities.Timer.prototype.start = function() {
   var that = this;
   var ticker = function ticker(dt) {
     that.currentRunTime += dt;
-    console.log(dt, that, that.currentRunTime);
     if (that.currentRunTime >= that.tick) {
       that.currentTicks += 1;
       if (that.currentTicks >= that.totalTicks) {
+        that.tickFunc();
         that.finalFunc();
         lime.scheduleManager.unschedule(ticker);
       } else {

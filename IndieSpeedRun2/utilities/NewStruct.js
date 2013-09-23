@@ -71,11 +71,9 @@ utilities.NewStruct.prototype.removeSlice = function() {
       this.removedWedges[0] = 7;
       this.removedWedges[1] = 0;
     }
-    console.log(this.removedWedges);
     removedWedge = nextRemovedWedge;
   } else {
     var removedWedge = Math.floor((Math.random() * 2));
-    console.log(removedWedge)
     if (removedWedge === 0) {
       this.removedWedges[0] -= 1;
       if (this.removedWedges[0] < 0) {

@@ -5,6 +5,7 @@ goog.require('lime.Circle');
 goog.require('lime.Layer');
 goog.require('lime.Scene');
 goog.require('lime.Sprite');
+goog.require('lime.scheduleManager');
 goog.require('utilities.ConvertCoordinates');
 goog.require('utilities.NewStruct');
 goog.require('utilities.Timer');
@@ -38,7 +39,9 @@ utilities.Level = function(size, triangleHeight, toppingChances) {
   var toppings = new lime.Layer().setPosition(512, 384);
   var levelData = new utilities.NewStruct(size);
   var powerUps = false;
-  var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices), sliceTimerTick(levelData, levelSlices));
+  var mouseActive = true;
+  //Level Timer
+  var levelTimer = new utilities.Timer(sliceTimerTick(levelData, levelSlices), function(){} );
 
 
   function initToppingsFunc(wedge, row, column) {
@@ -54,8 +57,14 @@ utilities.Level = function(size, triangleHeight, toppingChances) {
       goog.events.listen(newCircle, 'click', function(e) {
 
           var thisTopping = levelData.get(wedge, row, column);
+          console.log(mouseActive);
+          if (!thisTopping.isOccupied && levelData.wedgeAvailable[wedge] && mouseActive === true) {
+            //deactivate mouse
+            mouseActive = false;
+            lime.scheduleManager.callAfter(function() {
+              mouseActive = true;
+            },this, 1000);
 
-          if (!thisTopping.isOccupied && levelData.wedgeAvailable[wedge]) {
             //place a PEPPERONI
             newCircle.setFill(utilities.Topping('pepperoni').image); //.setFill(30*i,90*row,60*k);
             thisTopping.toppingType = 'pepperoni';
@@ -80,7 +89,6 @@ utilities.Level = function(size, triangleHeight, toppingChances) {
               }
             }
             powerUps = resultsObject;
-            console.log(powerUps);
           }
       });
     };
@@ -110,7 +118,6 @@ utilities.Level = function(size, triangleHeight, toppingChances) {
 function sliceTimerTick(levelData, levelSlices) {
   return function() {
     var removedSlice = levelData.removeSlice();
-    console.log(removedSlice);
     levelSlices[removedSlice].setFill(0, 0, 0, 0);
     var inWedge = levelData.getInWedge(removedSlice);
     for (var i = inWedge.length - 1; i >= 0; i--) {
