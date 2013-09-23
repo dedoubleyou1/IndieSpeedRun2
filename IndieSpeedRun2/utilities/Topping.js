@@ -44,6 +44,7 @@ var toppingData = {
     powerUp: function(levelData, wedge, row, column, strength){
       if(strength >= 4){
         powerUpData.stacking.isOn = true;
+        powerUpData.stacking.number = 1 + strength%4;
         return true;
       }
       
