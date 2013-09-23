@@ -70,7 +70,7 @@ var toppingData = {
     
     //AOE power-up
     powerUp: function(levelData, wedge, row, column, strength){
-      if(strength >= 2){
+      if(strength >= 3){
         var neighborList = levelData.neighbors(wedge,row,column);
         console.log('AOE ENABLED');
         
@@ -92,7 +92,7 @@ var toppingData = {
   //ANCHOVY//
   anchovy: {
     image: 'assets/toppings_anchovy.png',
-    chaining: function(levelData, wedge, row, column, resultsObject, levelTimer){
+    chaining: function(levelData, wedge, row, column, resultsObject){
       var neighborTypes = checkNeighbors(levelData,wedge,row,column);
       var pprCount = 0;
       
@@ -113,8 +113,11 @@ var toppingData = {
         return attackNeighbors(levelData, wedge, row, column, resultsObject);
       }
     },
-    powerUp: function(levelData, wedge, row, column, strength){
-      if(strength >= 1){
+    
+    //SLOW TIME
+    powerUp: function(levelData, wedge, row, column, strength, levelTimer){
+      if(strength >= 2){
+        
         return true;
       }  
       return false;
