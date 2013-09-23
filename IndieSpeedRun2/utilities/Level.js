@@ -14,9 +14,7 @@ goog.require('utilities.Timer');
 goog.require('utilities.Topping');
 
 utilities.Level = function(director, size, triangleHeight, toppingChances) {
-
   this.finished = false;
-  
 
   var newLevel = new lime.Scene();
 
@@ -24,7 +22,7 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
   newLevel.appendChild(backgroundLayer);
   var toppingsLayer = new lime.Layer().setPosition(512, 384);
   newLevel.appendChild(toppingsLayer);
-  var hudLayer = new lime.Layer().setPosition(0,0);
+  var hudLayer = new lime.Layer().setPosition(0, 0);
   newLevel.appendChild(hudLayer);
   var cursorLayer = new lime.Layer();
   newLevel.appendChild(cursorLayer);
@@ -56,25 +54,24 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
   var powerUps = false;
   var mouseActive = true;
   var cursor = new utilities.Cursor(director, cursorLayer, 'pepperoni');
-  
+
   var scoreData = {
       heroTotal: 0,
       enemyTotal: 0,
       undecided: 0
   };
-  
+
   //create Labels
-  var scoreLabel = new lime.Label().setText("Your Shares: 0% \nPrivately Owned: 0% \nPublicly Owned: 0%").setFontFamily('Verdana').setFontColor('#0c0').setFontSize(20).setFontWeight('bold').setSize(250,30).setPosition(125,50);
+  var scoreLabel = new lime.Label().setText('Your Shares: 0% \nPrivately Owned: 0% \nPublicly Owned: 0%').setFontFamily('Verdana').setFontColor('#0c0').setFontSize(20).setFontWeight('bold').setSize(250, 30).setPosition(125, 50);
   hudLayer.appendChild(scoreLabel);
-  
-  var comboLabel = new lime.Label().setText("").setFontFamily('Verdana').setFontColor('#00F').setFontSize(30).setFontWeight('bold').setSize(400,50).setPosition(700,50);
+
+  var comboLabel = new lime.Label().setText('').setFontFamily('Verdana').setFontColor('#00F').setFontSize(30).setFontWeight('bold').setSize(400, 50).setPosition(700, 50);
   hudLayer.appendChild(comboLabel);
-  
-  
-  var finalStepFunction = function(){
+
+  var finalStepFunction = function() {
     this.finished = true;
-  }
-  
+  };
+
   var levelTimer = new utilities.Timer(this.sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel), finalStepFunction);
   this.endTimer = levelTimer.start();
 
@@ -125,8 +122,8 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
               }
             }
             powerUps = resultsObject;
-            
-            comboCounter(powerUps,levelData);
+
+            comboCounter(powerUps, levelData);
           }
       });
     };
@@ -150,12 +147,12 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
 
 
 
-utilities.Level.prototype.isFinished = function()
+utilities.Level.prototype.isFinished = function ()
 {
   return this.finished;
 };
 
-utilities.Level.prototype.setFinished = function(fin)
+utilities.Level.prototype.setFinished = function (fin)
 {
   this.finished = fin;
 };
@@ -167,26 +164,25 @@ function comboCounter(powerUps, levelData)
 {
   var comboList = [];
 
-  if(powerUps.mushroom >=4 && powerUps.mushroom<6){
-    comboList.push("Double Stack ACTIVATED");
+  if (powerUps.mushroom >= 4 && powerUps.mushroom < 6) {
+    comboList.push('Double Stack ACTIVATED');
   }
-  else if(powerUps.mushroom >=6){
-    comboList.push("Triple Stack ACTIVATED");
+  else if (powerUps.mushroom >= 6) {
+    comboList.push('Triple Stack ACTIVATED');
   }
-  
-  if(powerUps.olive >=2){
-    comboList.push("AOE ACTIVATED");
+
+  if (powerUps.olive >= 2) {
+    comboList.push('AOE ACTIVATED');
   }
-  
-  if(powerUps.anchovy >= 2){
-    comboList.push("Time Slow ACTIVATED");
+
+  if (powerUps.anchovy >= 2) {
+    comboList.push('Time Slow ACTIVATED');
   }
-  
-  for(i=comboList.length-1;i>=0;i--)
-  {
+
+  for (i = comboList.length - 1; i >= 0; i--) {
     console.log(comboList[i]);
   }
-  
+
   return comboList;
 }
 
@@ -199,38 +195,38 @@ utilities.Level.prototype.sliceTimerTick = function(levelData, levelSlices, scor
     var inWedge = levelData.getInWedge(removedSlice);
     for (var i = inWedge.length - 1; i >= 0; i--) {
       inWedge[i].sprite.setFill(0, 0, 0, 0);
-    };
-    
+    }
+
     that.tallyScores(inWedge, scoreData, scoreLabel);
   };
-}
+};
 
 //called when a wedge is REMOVED
 //function tallyScores(inWedge, scoreData, scoreLabel,newLevelFunc)
 utilities.Level.prototype.tallyScores = function(inWedge, scoreData, scoreLabel)
 {
   for (var i = inWedge.length - 1; i >= 0; i--) {
-    if(inWedge[i].toppingType === 'pepperoni' || inWedge[i].toppingType === 'doublePepperoni' || inWedge[i].toppingType === 'triplePepperoni')
+    if (inWedge[i].toppingType === 'pepperoni' || inWedge[i].toppingType === 'doublePepperoni' || inWedge[i].toppingType === 'triplePepperoni')
       scoreData.heroTotal++;
-    else if(inWedge[i].toppingType === 'empty')
+    else if (inWedge[i].toppingType === 'empty')
       scoreData.undecided++;
     else
       scoreData.enemyTotal++;
-  };
-  
-  var heroPercentage = Math.round(100*scoreData.heroTotal/128);
-  var enemyPercentage = Math.round(100*scoreData.enemyTotal/128);
-  var unclaimedPercentage = Math.round(100*scoreData.undecided/128);
-  
+  }
+
+  var heroPercentage = Math.round(100 * scoreData.heroTotal / 128);
+  var enemyPercentage = Math.round(100 * scoreData.enemyTotal / 128);
+  var unclaimedPercentage = Math.round(100 * scoreData.undecided / 128);
+
   //console.log("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
-  scoreLabel.setText("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
-  
-  if(heroPercentage > 10){
+  scoreLabel.setText('Your Shares: ' + heroPercentage + '%, Privately Owned: ' + enemyPercentage + '%, Publicly Owned: ' + unclaimedPercentage + '%');
+
+  if (heroPercentage > 10) {
     this.endTimer();
     this.finished = true;
     console.log(this.finished);
   }
-}
+};
 
 
 function randomizeLevel(size, triangleHeight, levelData, toppings, toppingChances) {
