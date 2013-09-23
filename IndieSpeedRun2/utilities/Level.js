@@ -10,7 +10,7 @@ goog.require('utilities.NewStruct');
 goog.require('utilities.Timer');
 goog.require('utilities.Topping');
 
-utilities.Level = function(size, triangleHeight) {
+utilities.Level = function(size, triangleHeight, toppingChances) {
   var newLevel = new lime.Scene();
   var levelBackground = new lime.Sprite()
     .setFill('assets/pizza_large.png')
@@ -77,7 +77,7 @@ utilities.Level = function(size, triangleHeight) {
     }
   }
 
-  randomizeLevel(size, triangleHeight, levelData, toppings);
+  randomizeLevel(size, triangleHeight, levelData, toppings, toppingChances);
 
   newLevel.appendChild(toppings);
   this.levelScene = newLevel;
@@ -96,7 +96,7 @@ function sliceTimerTick(levelData) {
 
 
 
-function randomizeLevel(size, triangleHeight, levelData, toppings) {
+function randomizeLevel(size, triangleHeight, levelData, toppings, toppingChances) {
   var rand = 0;
 
   for (var wedge = 7; wedge >= 0; wedge--) {
