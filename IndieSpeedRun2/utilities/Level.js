@@ -1,6 +1,5 @@
 goog.provide('utilities.Level');
 
-
 //get requirements
 goog.require('lime.Circle');
 goog.require('lime.Layer');
@@ -8,10 +7,10 @@ goog.require('lime.Scene');
 goog.require('lime.Sprite');
 goog.require('utilities.ConvertCoordinates');
 goog.require('utilities.NewStruct');
+goog.require('utilities.Timer');
 goog.require('utilities.Topping');
 
 utilities.Level = function(size, triangleHeight) {
-
   var newLevel = new lime.Scene();
   var levelBackground = new lime.Sprite()
     .setFill('assets/pizza_large.png')
@@ -80,7 +79,21 @@ utilities.Level = function(size, triangleHeight) {
 
   newLevel.appendChild(toppings);
   this.levelScene = newLevel;
+
+  var levelTimer = new utilities.Timer(sliceTimerTick(levelData), sliceTimerTick(levelData));
+  levelTimer.start();
 };
+
+
+// Local Functions
+
+function sliceTimerTick(levelData) {
+  return function() {
+    levelData.removeSlice();
+  };
+}
+
+
 
 function randomizeLevel(size, triangleHeight, levelData, toppings) {
   var rand = 0;

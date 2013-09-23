@@ -1,5 +1,7 @@
 goog.provide('utilities.NewStruct');
 
+
+
 utilities.NewStruct = function(size) {
   this.struct = [];
   for (var i = 7; i >= 0; i--) {
@@ -14,6 +16,7 @@ utilities.NewStruct = function(size) {
     this.struct.push(rows);
   }
   this.size = size;
+  this.removedEdgeSlices = [];
   this.wedgeAvailable = [];
   for (var i = 7; i >= 0; i--) {
         this.wedgeAvailable.push(true);
@@ -26,6 +29,31 @@ utilities.NewStruct.prototype.add = function(wedge, row, column, data) {
 
 utilities.NewStruct.prototype.get = function(wedge, row, column) {
   return this.struct[wedge][row][column];
+};
+
+utilities.NewStruct.prototype.removeSlice = function() {
+  if (this.removedSlices.length === 0) {
+    var removedWedge = Math.floor((Math.random()*8));
+    this.wedgeAvailable[removedWedge] = false;
+  } else {
+    var removedWedge = Math.floor((Math.random()*2));
+    if (removedWedge === 0) {
+      this.removedSlices[0] -= 1;
+      if (this.removedSlices[0] < 0) {
+        this.removedSlices[0] = 7;
+      }
+      this.wedgeAvailable[this.removedSlices[0]] = false;
+    } else {
+      this.removedSlices[0] += 1;
+      if (this.removedSlices[0] > 7) {
+        this.removedSlices[0] = 0;
+      }
+      this.wedgeAvailable[this.removedSlices[0]] = false;
+    }
+  }
+
+
+  return
 };
 
 utilities.NewStruct.prototype.neighbors = function(wedge, row, column) {

@@ -1,28 +1,11 @@
 goog.provide('utilities.Timer');
 
 var timerSettings = {
-  tick: 5000
-  totalTicks: 8
+  tick: 5000,
+  totalTicks: 8,
+  currentRunTime: 0,
+  currentTicks: 0
 };
-
-function timerRun(that) {
-  var currentRunTime = 0;
-  var currentTicks = 0;
-  var tick = function tick(dt) {
-    totalRunTime += dt;
-    if (currentRunTime >= timerSettings.tick) {
-      currentTicks += 1;
-      if (currentTicks >= timerSettings.totalTicks) {
-        that.finalFunct();
-        lime.scheduleManager.unschedule(tick);
-      } else {
-        that.tickFunct();
-        currentRunTime = 0;
-      }
-    }
-  };
-  lime.scheduleManager.schedule(tick);
-}
 
 utilities.Timer = function(tickFunc, finalFunc, timerDisplayLayer) {
   this.tickFunc = tickFunc;
@@ -31,10 +14,26 @@ utilities.Timer = function(tickFunc, finalFunc, timerDisplayLayer) {
 };
 
 utilities.Timer.prototype.start = function() {
-  timerRun(this);
+  var that = this;
+  var tick = function tick(dt) {
+    timerSettings.totalRunTime += dt;
+    if (timerSettings.currentRunTime >= timerSettings.tick) {
+      console.log('Tick');
+      timerSettings.currentTicks += 1;
+      if (timerSettings.currentTicks >= timerSettings.totalTicks) {
+        that.finalFunct();
+        lime.scheduleManager.unschedule(tick);
+      } else {
+        that.tickFunct();
+        timerSettings.currentRunTime = 0;
+      }
+    }
+  };
+  lime.scheduleManager.schedule(tick);
 };
 
 utilities.Timer.prototype.addTime = function(bonusTime) {
+  timerSettings.currentRunTime -= bonusTime;
 };
 
 goog.exportSymbol('utilities.Timer', utilities.Timer);
