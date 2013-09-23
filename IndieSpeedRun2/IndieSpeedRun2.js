@@ -27,7 +27,7 @@ IndieSpeedRun2.start = function() {
   levels.push({ mushroom: .4, olive: 0, anchovy: 0 });//introduce mushrooms
   levels.push({ mushroom: .3, olive: .2, anchovy: 0});
   levels.push({ mushroom: .2, olive: .2, anchovy: .15 });
-  levels.push({ mushroom: 0, olive: 0, anchovy:  });
+  levels.push({ mushroom: 0, olive: 0, anchovy: .5 });
 
   var myNewLevel = new utilities.Level(4, 164,levels[0]);//toppingChances);
   director.replaceScene(myNewLevel.levelScene);
