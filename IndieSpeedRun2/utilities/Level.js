@@ -97,26 +97,31 @@ function sliceTimerTick(levelData) {
 
 
 function randomizeLevel(size, triangleHeight, levelData, toppings, toppingChances) {
+
+  var low = toppingChances.mushroom;
+  var mid = low + toppingChances.olive;
+  var high = mid + toppingChances.anchovy;
+
   var rand = 0;
 
   for (var wedge = 7; wedge >= 0; wedge--) {
     for (var row = size - 1; row >= 0; row--) {
       for (var column = row * 2; column >= 0; column--) {
         rand = Math.random();
-        if (rand < .2) {
+        if (rand < low) {
           var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
           levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('mushroom').image);
           levelData.get(wedge, row, column).isOccupied = true;
           levelData.get(wedge, row, column).toppingType = 'mushroom';
         }
-        else if (rand >= 0.2 && rand < 0.3) {
+        else if (rand >= low && rand < mid) {
           var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
 
           levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('olive').image);
           levelData.get(wedge, row, column).isOccupied = true;
           levelData.get(wedge, row, column).toppingType = 'olive';
         }
-        else if (rand >= 0.5 && rand < 0.6) {
+        else if (rand >= mid && rand < high) {
           var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
 
           levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('anchovy').image);
