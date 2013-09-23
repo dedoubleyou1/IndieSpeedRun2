@@ -1,38 +1,38 @@
 goog.provide('utilities.Timer');
 
-var timerSettings = {
-  tick: 1000,
-  totalTicks: 8,
-  currentRunTime: 0,
-  currentTicks: 0
-};
+
 //, timerDisplayLayer
 utilities.Timer = function(tickFunc, finalFunc) {
   this.tickFunc = tickFunc;
   this.finalFunc = finalFunc;
+  this.tick = 1000;
+  this.totalTicks = 8;
+  this.currentRunTime = 0;
+  this.currentTicks = 0;
   //this.timerDisplayLayer = timerDisplayLayer;
 };
 
 utilities.Timer.prototype.start = function() {
   var that = this;
-  var tick = function tick(dt) {
-    timerSettings.currentRunTime += dt;
-    if (timerSettings.currentRunTime >= timerSettings.tick) {
-      timerSettings.currentTicks += 1;
-      if (timerSettings.currentTicks >= timerSettings.totalTicks) {
+  var ticker = function ticker(dt) {
+    that.currentRunTime += dt;
+    console.log(dt, that, that.currentRunTime);
+    if (that.currentRunTime >= that.tick) {
+      that.currentTicks += 1;
+      if (that.currentTicks >= that.totalTicks) {
         that.finalFunc();
-        lime.scheduleManager.unschedule(tick);
+        lime.scheduleManager.unschedule(ticker);
       } else {
         that.tickFunc();
-        timerSettings.currentRunTime = 0;
+        that.currentRunTime = 0;
       }
     }
   };
-  lime.scheduleManager.schedule(tick);
+  lime.scheduleManager.schedule(ticker);
 };
 
 utilities.Timer.prototype.addTime = function(bonusTime) {
-  timerSettings.currentRunTime -= bonusTime;
+  this.currentRunTime -= bonusTime;
 };
 
 goog.exportSymbol('utilities.Timer', utilities.Timer);
