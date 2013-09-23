@@ -1,24 +1,5 @@
 goog.provide('utilities.Topping');
 
-var powerUpData = {
-  stacking: {
-    isOn: false,
-    number: 2
-  },
-  areaOfEffect: {
-    isOn: false,
-    fillSize: 1
-  },
-  timerSlow: {
-    isOn: false,
-    timeDamper: .5 //half times speed!
-  },
-  bomb: {
-    isOn: false,
-    numMortars: 5
-  }
-};
-
 var toppingData = {
   //PEPPERONI//
   pepperoni: {
@@ -134,11 +115,8 @@ var toppingData = {
     },
     powerUp: function(levelData, wedge, row, column, strength){
       if(strength >= 1){
-        powerUpData.timerSlow.isOn = true;
         return true;
-      }
-      
-      powerUpData.timerSlow.isOn = true;      
+      }  
       return false;
     }
   },
