@@ -27,26 +27,12 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
   var cursorLayer = new lime.Layer();
   newLevel.appendChild(cursorLayer);
 
+  // Draw 8 Pizza Slices
   var levelSlices = [];
-  levelSlices[0] = new lime.Sprite()
-    .setFill('assets/pizza_sliced_0.png');
-  levelSlices[1] = new lime.Sprite()
-    .setFill('assets/pizza_sliced_1.png');
-  levelSlices[2] = new lime.Sprite()
-    .setFill('assets/pizza_sliced_2.png');
-  levelSlices[3] = new lime.Sprite()
-    .setFill('assets/pizza_sliced_3.png');
-  levelSlices[4] = new lime.Sprite()
-    .setFill('assets/pizza_sliced_4.png');
-  levelSlices[5] = new lime.Sprite()
-    .setFill('assets/pizza_sliced_5.png');
-  levelSlices[6] = new lime.Sprite()
-    .setFill('assets/pizza_sliced_6.png');
-  levelSlices[7] = new lime.Sprite()
-    .setFill('assets/pizza_sliced_7.png');
-
-  for (var i = levelSlices.length - 1; i >= 0; i--) {
-    levelSlices[i].setPosition(512, 384).setSize(768, 768);
+  for (var i = 7; i >= 0; i--) {
+    levelSlices[i] = new lime.Sprite();
+    levelSlices[i].setFill('assets/pizza_sliced_' + i + '.png')
+      .setPosition(512, 384).setSize(768, 768);
     backgroundLayer.appendChild(levelSlices[i]);
   }
 
@@ -62,25 +48,37 @@ utilities.Level = function(director, size, triangleHeight, toppingChances) {
   };
 
   //create Labels
-  var scoreLabel = new lime.Label().setText('Your Shares: 0% \nPrivately Owned: 0% \nPublicly Owned: 0%').setFontFamily('Verdana').setFontColor('#0c0').setFontSize(20).setFontWeight('bold').setSize(250, 30).setPosition(125, 50);
+  var scoreLabel = new lime.Label()
+    .setText('In Favor of Acquisition: 0%\nAgainst Acquisition: 0%')
+    .setFontFamily('Verdana')
+    .setFontColor(0, 0, 0)
+    .setFontSize(20)
+    .setFontWeight('bold')
+    .setSize(360, 30)
+    .setPosition(180, 30);
   hudLayer.appendChild(scoreLabel);
 
-  var comboLabel = new lime.Label().setText('').setFontFamily('Verdana').setFontColor('#00F').setFontSize(30).setFontWeight('bold').setSize(400, 50).setPosition(700, 50);
+  var comboLabel = new lime.Label()
+    .setText('')
+    .setFontFamily('Verdana')
+    .setFontColor('#00F')
+    .setFontSize(30)
+    .setFontWeight('bold')
+    .setSize(400, 50)
+    .setPosition(700, 50);
   hudLayer.appendChild(comboLabel);
 
-  var finalStepFunction = function() {
-    this.finished = true;
-  };
-
-  var levelTimer = new utilities.Timer(this.sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel), finalStepFunction);
+  var levelTimer = new utilities.Timer(this.sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel), function() {});
   this.endTimer = levelTimer.start();
-
 
   function initToppingsFunc(wedge, row, column) {
     return function() {
 
       var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
-      var newCircle = new lime.Circle().setSize(40, 40).setFill(0, 0, 0, 0).setPosition(myCoordinates.x, myCoordinates.y);
+      var newCircle = new lime.Circle()
+        .setSize(40, 40)
+        .setFill(0, 0, 0, 0)
+        .setPosition(myCoordinates.x, myCoordinates.y);
       toppingsLayer.appendChild(newCircle);
 
       levelData.add(wedge, row, column, {toppingType: 'empty', sprite: newCircle, isOccupied: false});
@@ -206,25 +204,26 @@ utilities.Level.prototype.sliceTimerTick = function(levelData, levelSlices, scor
 utilities.Level.prototype.tallyScores = function(inWedge, scoreData, scoreLabel)
 {
   for (var i = inWedge.length - 1; i >= 0; i--) {
-    if (inWedge[i].toppingType === 'pepperoni' || inWedge[i].toppingType === 'doublePepperoni' || inWedge[i].toppingType === 'triplePepperoni')
-      scoreData.heroTotal++;
-    else if (inWedge[i].toppingType === 'empty')
-      scoreData.undecided++;
-    else
-      scoreData.enemyTotal++;
+    if (inWedge[i].toppingType === 'pepperoni' || inWedge[i].toppingType === 'doublePepperoni' || inWedge[i].toppingType === 'triplePepperoni') {
+      scoreData.heroTotal += 1;
+    } else {
+      scoreData.enemyTotal += 1;
+    }
   }
 
   var heroPercentage = Math.round(100 * scoreData.heroTotal / 128);
   var enemyPercentage = Math.round(100 * scoreData.enemyTotal / 128);
-  var unclaimedPercentage = Math.round(100 * scoreData.undecided / 128);
 
   //console.log("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
-  scoreLabel.setText('Your Shares: ' + heroPercentage + '%, Privately Owned: ' + enemyPercentage + '%, Publicly Owned: ' + unclaimedPercentage + '%');
+  scoreLabel.setText('In Favor of Acquisition: ' + heroPercentage + '%\nAgainst Acquisition: ' + enemyPercentage + '%');
 
-  if (heroPercentage > 10) {
+  if (heroPercentage > 50) {
+    this.finished = 'Acquision Successful';
     this.endTimer();
-    this.finished = true;
-    console.log(this.finished);
+  }
+  if (enemyPercentage >= 50) {
+    this.finished = 'Acquision Failed';
+    this.endTimer();
   }
 };
 
