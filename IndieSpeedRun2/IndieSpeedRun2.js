@@ -55,7 +55,14 @@ IndieSpeedRun2.start = function() {
           currentLevel = 0;
         }
       }
-      var winLabel = new lime.Label().setText(myLevel.isFinished()).setFontFamily('Verdana').setFontColor(0, 0, 0, 0).setFontSize(30).setFontWeight('bold').setSize(400, 50).setPosition(512, 384)
+      var winLabel = new lime.Label()
+        .setText(myLevel.isFinished())
+        .setFontFamily('Verdana')
+        .setFontColor(0, 0, 0, 0)
+        .setFontSize(30)
+        .setFontWeight('bold')
+        .setSize(400, 50)
+        .setPosition(512, 384)
       winLabel.runAction(pop);
       myLevel.levelScene.appendChild(winLabel);
       myLevel.setFinished(false);
@@ -71,5 +78,6 @@ IndieSpeedRun2.start = function() {
 };
 
 
-//this is required for outside access after code is compiled in ADVANCED_COMPILATIONS mode
+//this is required for outside access after
+//code is compiled in ADVANCED_COMPILATIONS mode
 goog.exportSymbol('IndieSpeedRun2.start', IndieSpeedRun2.start);

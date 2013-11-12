@@ -176,24 +176,24 @@ var toppingData = {
 
   triplePepperoni: {
     image: 'assets/toppings_pepperoni_triple.png',
-    chaining: function(levelData, wedge, row, column,resultsObject){
+    chaining: function(levelData, wedge, row, column, resultsObject) {
       //nothing happens here!
     },
-    powerUp: function(levelData, wedge, row, column, strength){
+    powerUp: function(levelData, wedge, row, column, strength) {
       //nuttin here either
     }
   },
-  
+
   littlePepperoni: {
     image: 'assets/toppings_pepperoni.png',
-    chaining: function(levelData, wedge, row, column,resultsObject){
+    chaining: function(levelData, wedge, row, column, resultsObject) {
       //turn into a pepperoni and ATTACK!!
       levelData.get(wedge, row, column).toppingType = 'pepperoni';
       levelData.get(wedge, row, column).sprite.setFill(toppingData.pepperoni.image);
       resultsObject.mushroom++;
       attackNeighbors(levelData, wedge, row, column, resultsObject);
     },
-    powerUp: function(levelData, wedge, row, column, strength){
+    powerUp: function(levelData, wedge, row, column, strength) {
       //nuttin here either
     }
   }
@@ -206,34 +206,33 @@ utilities.Topping = function(type)
 };
 
 //dat local neighbor check
-function attackNeighbors(levelData, wedge,row,column, resultsObject)
-{
+function attackNeighbors(levelData, wedge, row, column, resultsObject) {
   //TALLYING
-  levelData.get(wedge,row,column).toppingType;
+  levelData.get(wedge, row, column).toppingType;
 
-  var neighborList = levelData.neighbors(wedge,row,column);
-  
+  var neighborList = levelData.neighbors(wedge, row, column);
+
   for (var i = neighborList.length - 1; i >= 0; i--) {
     var target = levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
-    
-    if(target.isOccupied && target.toppingType != 'pepperoni')
-      toppingData[target.toppingType].chaining(levelData,neighborList[i].wedge, neighborList[i].row, neighborList[i].column, resultsObject);
+
+    if (target.isOccupied && target.toppingType != 'pepperoni') {
+      toppingData[target.toppingType].chaining(levelData, neighborList[i].wedge, neighborList[i].row, neighborList[i].column, resultsObject);
+    }
   }
 }
 
 
-function checkNeighbors(levelData, wedge,row,column)
-{
-  var neighborList = levelData.neighbors(wedge,row,column);
+function checkNeighbors(levelData, wedge, row, column) {
+  var neighborList = levelData.neighbors(wedge, row, column);
   var neighborTypes = [];
-  
+
   for (var i = neighborList.length - 1; i >= 0; i--) {
     var target = levelData.get(neighborList[i].wedge, neighborList[i].row, neighborList[i].column);
-    
-    if(target.isOccupied)
+    if (target.isOccupied) {
       neighborTypes.push(target.toppingType);
+    }
   }
-  
+
   return neighborTypes;
 }
 

@@ -33,7 +33,7 @@ utilities.Cursor = function(director, cursorLayer, cursorType) {
   cursorLayer.appendChild(this.cursorSprite);
   var that = this;
   goog.events.listen(director, 'mousemove', function(e) {
-   // console.log(e);
+    console.log(e);
     that.cursorSprite.setPosition(e.position.x, e.position.y);
   });
 };

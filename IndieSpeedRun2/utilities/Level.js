@@ -1,268 +1,166 @@
-goog.provide('utilities.Level');
+goog.provide('utilities.NewStruct');
 
-//get requirements
 
-goog.require('lime.Circle');
-goog.require('lime.Layer');
-goog.require('lime.Scene');
-goog.require('lime.Sprite');
-goog.require('lime.scheduleManager');
-goog.require('utilities.ConvertCoordinates');
-goog.require('utilities.Cursor');
-goog.require('utilities.NewStruct');
-goog.require('utilities.Timer');
-goog.require('utilities.Topping');
 
-utilities.Level = function(director, size, triangleHeight, toppingChances) {
-  this.finished = false;
-
-  var newLevel = new lime.Scene();
-
-  var backgroundLayer = new lime.Layer();
-  newLevel.appendChild(backgroundLayer);
-  var toppingsLayer = new lime.Layer().setPosition(512, 384);
-  newLevel.appendChild(toppingsLayer);
-  var hudLayer = new lime.Layer().setPosition(0, 0);
-  newLevel.appendChild(hudLayer);
-  var cursorLayer = new lime.Layer();
-  newLevel.appendChild(cursorLayer);
-
-  // Draw 8 Pizza Slices
-  var levelSlices = [];
+utilities.NewStruct = function(size) {
+  this.struct = [];
   for (var i = 7; i >= 0; i--) {
-    levelSlices[i] = new lime.Sprite();
-    levelSlices[i].setFill('assets/pizza_sliced_' + i + '.png')
-      .setPosition(512, 384).setSize(768, 768);
-    backgroundLayer.appendChild(levelSlices[i]);
+    var rows = [];
+    for (var j = size - 1; j >= 0; j--) {
+      var columns = [];
+      for (var k = j * 2 - 1; k >= 0; k--) {
+        columns.push({});
+      }
+      rows.push(columns);
+    }
+    this.struct.push(rows);
   }
-
-  var levelData = new utilities.NewStruct(size);
-  var powerUps = false;
-  var mouseActive = true;
-  var cursor = new utilities.Cursor(director, cursorLayer, 'pepperoni');
-
-  var scoreData = {
-      heroTotal: 0,
-      enemyTotal: 0,
-      undecided: 0
-  };
-
-  //create Labels
-  var scoreLabel = new lime.Label()
-    .setText('In Favor of Acquisition: 0%\nAgainst Acquisition: 0%')
-    .setFontFamily('Verdana')
-    .setFontColor(0, 0, 0)
-    .setFontSize(20)
-    .setFontWeight('bold')
-    .setSize(360, 30)
-    .setPosition(180, 30);
-  hudLayer.appendChild(scoreLabel);
-
-  var comboLabel = new lime.Label()
-    .setText('')
-    .setFontFamily('Verdana')
-    .setFontColor('#00F')
-    .setFontSize(30)
-    .setFontWeight('bold')
-    .setSize(400, 50)
-    .setPosition(700, 50);
-  hudLayer.appendChild(comboLabel);
-
-  var levelTimer = new utilities.Timer(this.sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel), function() {});
-  this.endTimer = levelTimer.start();
-
-  function initToppingsFunc(wedge, row, column) {
-    return function() {
-
-      var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
-      var newCircle = new lime.Circle()
-        .setSize(40, 40)
-        .setFill(0, 0, 0, 0)
-        .setPosition(myCoordinates.x, myCoordinates.y);
-      toppingsLayer.appendChild(newCircle);
-
-      levelData.add(wedge, row, column, {toppingType: 'empty', sprite: newCircle, isOccupied: false});
-
-      //HANDLE mouse clicks
-      goog.events.listen(newCircle, 'click', function(e) {
-
-          var thisTopping = levelData.get(wedge, row, column);
-          if (!thisTopping.isOccupied && levelData.wedgeAvailable[wedge] && mouseActive === true) {
-            cursor.animate();
-            //deactivate mouse
-            mouseActive = false;
-            lime.scheduleManager.callAfter(function() {
-              mouseActive = true;
-            },this, 1000);
-
-            //place a PEPPERONI
-            thisTopping.sprite.setFill(utilities.Topping('pepperoni').image); //.setFill(30*i,90*row,60*k);
-
-            thisTopping.toppingType = 'pepperoni';
-            thisTopping.isOccupied = true;
-            var neighborList = levelData.neighbors(wedge, row, column);
-
-            if (!!powerUps) {
-              var powerUpProperties = Object.getOwnPropertyNames(powerUps);
-              for (var i = powerUpProperties.length - 1; i >= 0; i--) {
-                if (powerUps[powerUpProperties[i]] > 0) {
-                  utilities.Topping(powerUpProperties[i]).powerUp(levelData, wedge, row, column, powerUps[powerUpProperties[i]], levelTimer);
-                }
-              }
-            }
-
-            //Check Neighbor Triggers
-            var resultsObject = {mushroom: 0, olive: 0, anchovy: 0};
-            for (var x = neighborList.length - 1; x >= 0; x--) {
-              var neighborData = levelData.get(neighborList[x].wedge, neighborList[x].row, neighborList[x].column);
-              if (neighborData.isOccupied) {
-                utilities.Topping(neighborData.toppingType).chaining(levelData, neighborList[x].wedge, neighborList[x].row, neighborList[x].column, resultsObject); //wedge, row, column);
-              }
-            }
-            powerUps = resultsObject;
-
-            comboCounter(powerUps, levelData);
-          }
-      });
-    };
+  this.size = size;
+  this.removedWedges = [];
+  this.wedgeAvailable = [];
+  for (var i = 7; i >= 0; i--) {
+        this.wedgeAvailable.push(true);
   }
+};
 
-  for (var wedge = 7; wedge >= 0; wedge--) {
-    for (var row = size - 1; row >= 0; row--) {
+utilities.NewStruct.prototype.add = function(wedge, row, column, data) {
+  this.struct[wedge][row][column] = data;
+};
+
+utilities.NewStruct.prototype.get = function(wedge, row, column) {
+  return this.struct[wedge][row][column];
+};
+
+utilities.NewStruct.prototype.getInWedge = function(wedge) {
+  var wedgeMembers = [];
+    for (var row = this.size - 1; row >= 0; row--) {
       for (var column = row * 2; column >= 0; column--) {
-
-        (initToppingsFunc(wedge, row, column))();
-
+        wedgeMembers.push(this.struct[wedge][row][column]);
       }
     }
-  }
-
-  randomizeLevel(size, triangleHeight, levelData, toppingsLayer, toppingChances);
-
-  this.levelScene = newLevel;
-
+  return wedgeMembers;
 };
 
+utilities.NewStruct.prototype.removeSlice = function() {
+  var removedWedge;
+  if (this.removedWedges.length === 0) {
+    removedWedge = Math.floor((Math.random() * 8));
+    this.wedgeAvailable[removedWedge] = false;
+    this.removedWedges.push(removedWedge);
+  } else if (this.removedWedges.length === 1) {
+    var removedWedge = Math.floor((Math.random() * 2));
+    var nextRemovedWedge = this.removedWedges[0];
+    if (removedWedge === 0) {
 
-
-utilities.Level.prototype.isFinished = function ()
-{
-  return this.finished;
-};
-
-utilities.Level.prototype.setFinished = function (fin)
-{
-  this.finished = fin;
-};
-
-
-
-// Local Functions
-function comboCounter(powerUps, levelData)
-{
-  var comboList = [];
-
-  if (powerUps.mushroom >= 4 && powerUps.mushroom < 6) {
-    comboList.push('Double Stack ACTIVATED');
-  }
-  else if (powerUps.mushroom >= 6) {
-    comboList.push('Triple Stack ACTIVATED');
-  }
-
-  if (powerUps.olive >= 2) {
-    comboList.push('AOE ACTIVATED');
-  }
-
-  if (powerUps.anchovy >= 2) {
-    comboList.push('Time Slow ACTIVATED');
-  }
-
-  for (i = comboList.length - 1; i >= 0; i--) {
-    console.log(comboList[i]);
-  }
-
-  return comboList;
-}
-
-//function sliceTimerTick(levelData, levelSlices, scoreData, scoreLabel,newLevelFunc) {
-utilities.Level.prototype.sliceTimerTick = function(levelData, levelSlices, scoreData, scoreLabel) {
-  var that = this;
-  return function() {
-    var removedSlice = levelData.removeSlice();
-    levelSlices[removedSlice].setFill(0, 0, 0, 0);
-    var inWedge = levelData.getInWedge(removedSlice);
-    for (var i = inWedge.length - 1; i >= 0; i--) {
-      inWedge[i].sprite.setFill(0, 0, 0, 0);
-    }
-
-    that.tallyScores(inWedge, scoreData, scoreLabel);
-  };
-};
-
-//called when a wedge is REMOVED
-//function tallyScores(inWedge, scoreData, scoreLabel,newLevelFunc)
-utilities.Level.prototype.tallyScores = function(inWedge, scoreData, scoreLabel)
-{
-  for (var i = inWedge.length - 1; i >= 0; i--) {
-    if (inWedge[i].toppingType === 'pepperoni' || inWedge[i].toppingType === 'doublePepperoni' || inWedge[i].toppingType === 'triplePepperoni') {
-      scoreData.heroTotal += 1;
+      nextRemovedWedge -= 1;
+      if (nextRemovedWedge < 0) {
+        nextRemovedWedge = 7;
+      }
     } else {
-      scoreData.enemyTotal += 1;
-    }
-  }
-
-  var heroPercentage = Math.round(100 * scoreData.heroTotal / 128);
-  var enemyPercentage = Math.round(100 * scoreData.enemyTotal / 128);
-
-  //console.log("Your Shares: " + heroPercentage + "%, Privately Owned: " + enemyPercentage + "%, Publicly Owned: " + unclaimedPercentage + "%");
-  scoreLabel.setText('In Favor of Acquisition: ' + heroPercentage + '%\nAgainst Acquisition: ' + enemyPercentage + '%');
-
-  if (heroPercentage > 50) {
-    this.finished = 'Acquision Successful';
-    this.endTimer();
-  }
-  if (enemyPercentage >= 50) {
-    this.finished = 'Acquision Failed';
-    this.endTimer();
-  }
-};
-
-
-function randomizeLevel(size, triangleHeight, levelData, toppings, toppingChances) {
-
-  var low = toppingChances.mushroom;
-  var mid = low + toppingChances.olive;
-  var high = mid + toppingChances.anchovy;
-
-  var rand = 0;
-
-  for (var wedge = 7; wedge >= 0; wedge--) {
-    for (var row = size - 1; row >= 0; row--) {
-      for (var column = row * 2; column >= 0; column--) {
-        rand = Math.random();
-        if (rand < low) {
-          var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
-          levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('mushroom').image);
-          levelData.get(wedge, row, column).isOccupied = true;
-          levelData.get(wedge, row, column).toppingType = 'mushroom';
-        }
-        else if (rand >= low && rand < mid) {
-          var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
-
-          levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('olive').image);
-          levelData.get(wedge, row, column).isOccupied = true;
-          levelData.get(wedge, row, column).toppingType = 'olive';
-        }
-        else if (rand >= mid && rand < high) {
-          var myCoordinates = utilities.ConvertCoordinates(wedge, row, column, triangleHeight);
-
-          levelData.get(wedge, row, column).sprite.setFill(utilities.Topping('anchovy').image);
-          levelData.get(wedge, row, column).isOccupied = true;
-          levelData.get(wedge, row, column).toppingType = 'anchovy';
-        }
+      nextRemovedWedge += 1;
+      if (nextRemovedWedge > 7) {
+        nextRemovedWedge = 0;
       }
     }
+    this.wedgeAvailable[nextRemovedWedge] = false;
+    this.removedWedges.push(nextRemovedWedge);
+    this.removedWedges.sort(function(a,b) {
+      return a - b;
+    });
+    if (this.removedWedges[0] === 0 && this.removedWedges[1] === 7){
+      this.removedWedges[0] = 7;
+      this.removedWedges[1] = 0;
+    }
+    removedWedge = nextRemovedWedge;
+  } else {
+    var removedWedge = Math.floor((Math.random() * 2));
+    if (removedWedge === 0) {
+      this.removedWedges[0] -= 1;
+      if (this.removedWedges[0] < 0) {
+        this.removedWedges[0] = 7;
+      }
+      this.wedgeAvailable[this.removedWedges[0]] = false;
+      removedWedge = this.removedWedges[0];
+    } else {
+      this.removedWedges[1] += 1;
+      if (this.removedWedges[1] > 7) {
+        this.removedWedges[1] = 0;
+      }
+      this.wedgeAvailable[this.removedWedges[1]] = false;
+      removedWedge = this.removedWedges[1];
+    }
   }
-}
+  return removedWedge;
+};
 
-goog.exportSymbol('utilities.Level', utilities.Level);
+utilities.NewStruct.prototype.neighbors = function(wedge, row, column) {
+  neighborList = [];
+
+  var wedgeCCW;
+  var wedgeCW;
+  
+  var columnCCW;
+  var columnCW;
+  
+  //var rowDir;
+  columnCCW = column - 1;
+  columnCW = column + 1;
+  wedgeCCW = wedge;
+  wedgeCW = wedge;
+  
+  if (column === 0) {
+    columnCCW = row * 2;
+    if (wedge === 0) {
+      wedgeCCW = 7;
+    } else {
+      wedgeCCW = wedge - 1;
+    }
+  }
+  
+  if (column === row * 2) {
+    columnCW = 0;
+    if (wedge === 7) {
+      wedgeCW = 0;
+    } else {
+      wedgeCW = wedge + 1;
+    }
+  }
+
+  //IF wedge is available = push the data
+  if (this.wedgeAvailable[wedgeCW]) {
+    neighborList.push({
+      wedge: wedgeCW,
+      column: columnCW,
+      row: row
+    });
+  }
+
+  if (this.wedgeAvailable[wedgeCCW]) {
+    neighborList.push({
+      wedge: wedgeCCW,
+      column: columnCCW,
+      row: row
+    });
+  }
+  
+  //
+  if (column % 2 !== 0) {
+    neighborList.push({
+      wedge: wedge,
+      column: column-1,
+      row: row - 1
+    });
+  } else if (row < this.size - 1) {
+    neighborList.push({
+      wedge: wedge,
+      column: column+1,
+      row: row + 1
+    });
+  }
+  
+  
+  return neighborList;
+};
+
+goog.exportSymbol('utilities.NewStruct', utilities.NewStruct);
+
