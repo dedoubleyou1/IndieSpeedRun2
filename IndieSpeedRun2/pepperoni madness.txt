@@ -1,0 +1,25 @@
+Handle Clicking
+-drop pepperoni
+-neighbors are checked
+-STUFF HAPPENS based on your drop (chain if possible)
+
+
+Topping Objects:
+-topping (parent)
+	-pepperoni
+	-mushroom
+	-etc.
+-properties of a topping
+	-area of influence/dominance
+	-area shape?
+	-removal?
+	-image
+
+
+ART:
+-errythin'
+
+
+**REACH**
+-Sound
+-Chaining Delay (watch those pepperonis take over like WAVES)
